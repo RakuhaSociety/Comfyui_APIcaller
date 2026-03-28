@@ -34,7 +34,7 @@
 
 ```bash
 cd ComfyUI/custom_nodes
-git clone https://github.com/你的用户名/Comfyui_APIcaller.git
+git clone https://github.com/RakuhaSociety/Comfyui_APIcaller.git
 cd Comfyui_APIcaller
 pip install -r requirements.txt
 ```
@@ -113,7 +113,7 @@ A multi-provider ComfyUI custom node plugin integrating video generation, image 
 
 ```bash
 cd ComfyUI/custom_nodes
-git clone https://github.com/YOUR_USERNAME/Comfyui_APIcaller.git
+git clone https://github.com/RakuhaSociety/Comfyui_APIcaller.git
 cd Comfyui_APIcaller
 pip install -r requirements.txt
 ```
