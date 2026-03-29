@@ -1,0 +1,626 @@
+{
+  "id": "0922b0cb-887b-48e1-aa07-2e2dc79e01ee",
+  "revision": 0,
+  "last_node_id": 24,
+  "last_link_id": 40,
+  "nodes": [
+    {
+      "id": 6,
+      "type": "SaveVideo",
+      "pos": [
+        1244.2481473201542,
+        68.85976514409498
+      ],
+      "size": [
+        374,
+        349.61119381384947
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "label": "video",
+          "name": "video",
+          "type": "VIDEO",
+          "link": 27
+        },
+        {
+          "label": "filename_prefix",
+          "name": "filename_prefix",
+          "type": "STRING",
+          "widget": {
+            "name": "filename_prefix"
+          },
+          "link": null
+        },
+        {
+          "label": "format",
+          "name": "format",
+          "type": "COMBO",
+          "widget": {
+            "name": "format"
+          },
+          "link": null
+        },
+        {
+          "label": "codec",
+          "name": "codec",
+          "type": "COMBO",
+          "widget": {
+            "name": "codec"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.3.68",
+        "Node name for S&R": "SaveVideo",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.4.1"
+        }
+      },
+      "widgets_values": [
+        "video/ComfyUI",
+        "mp4",
+        "h264"
+      ]
+    },
+    {
+      "id": 18,
+      "type": "LoadImage",
+      "pos": [
+        377.8020457354109,
+        58.38188622833634
+      ],
+      "size": [
+        270,
+        314
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "label": "图像",
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            33
+          ]
+        },
+        {
+          "label": "遮罩",
+          "name": "MASK",
+          "type": "MASK",
+          "links": null
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.7.0",
+        "Node name for S&R": "LoadImage",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.7"
+        }
+      },
+      "widgets_values": [
+        "00009-1947001331.png",
+        "image"
+      ]
+    },
+    {
+      "id": 19,
+      "type": "LoadImage",
+      "pos": [
+        375.59154893008645,
+        442.65401818840434
+      ],
+      "size": [
+        270,
+        314
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "label": "图像",
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            34
+          ]
+        },
+        {
+          "label": "遮罩",
+          "name": "MASK",
+          "type": "MASK",
+          "links": null
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.7.0",
+        "Node name for S&R": "LoadImage",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.7"
+        }
+      },
+      "widgets_values": [
+        "00009-1947001331.png",
+        "image"
+      ]
+    },
+    {
+      "id": 22,
+      "type": "PreviewAny",
+      "pos": [
+        778.8725502558691,
+        463.6357415379743
+      ],
+      "size": [
+        399.60735400929616,
+        112
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "label": "source",
+          "name": "source",
+          "type": "*",
+          "link": 35
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.7"
+        },
+        "cnr_id": "comfy-core",
+        "ver": "0.17.2",
+        "Node name for S&R": "PreviewAny"
+      },
+      "widgets_values": [
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "id": 21,
+      "type": "APIcaller_KeyPool",
+      "pos": [
+        243.4752328984988,
+        822.1314580751517
+      ],
+      "size": [
+        400,
+        240.0000000000004
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "label": "keys",
+          "name": "keys",
+          "type": "STRING",
+          "widget": {
+            "name": "keys"
+          },
+          "link": null
+        },
+        {
+          "label": "lock",
+          "name": "lock",
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "lock"
+          },
+          "link": null
+        },
+        {
+          "label": "note1",
+          "name": "note1",
+          "shape": 7,
+          "type": "STRING",
+          "widget": {
+            "name": "note1"
+          },
+          "link": null
+        },
+        {
+          "label": "note2",
+          "name": "note2",
+          "shape": 7,
+          "type": "STRING",
+          "widget": {
+            "name": "note2"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "label": "selected_key",
+          "name": "selected_key",
+          "type": "STRING",
+          "links": [
+            36
+          ]
+        },
+        {
+          "label": "info",
+          "name": "info",
+          "type": "STRING",
+          "links": [
+            35
+          ]
+        }
+      ],
+      "properties": {
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.7"
+        },
+        "aux_id": "RakuhaSociety/Comfyui_APIcaller",
+        "ver": "6cfc3bf6544cdd283276c0c896ad9375f0b09f88",
+        "Node name for S&R": "APIcaller_KeyPool"
+      },
+      "widgets_values": [
+        "",
+        false,
+        "",
+        ""
+      ]
+    },
+    {
+      "id": 23,
+      "type": "PreviewAny",
+      "pos": [
+        1251.0650705347457,
+        472.2111944992921
+      ],
+      "size": [
+        399.60735400929616,
+        112
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {
+          "label": "source",
+          "name": "source",
+          "type": "*",
+          "link": 40
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.7"
+        },
+        "cnr_id": "comfy-core",
+        "ver": "0.17.2",
+        "Node name for S&R": "PreviewAny"
+      },
+      "widgets_values": [
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "id": 24,
+      "type": "PreviewAny",
+      "pos": [
+        1253.6814352272004,
+        648.8329366425523
+      ],
+      "size": [
+        399.60735400929616,
+        112
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+        {
+          "label": "source",
+          "name": "source",
+          "type": "*",
+          "link": 39
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.7"
+        },
+        "cnr_id": "comfy-core",
+        "ver": "0.17.2",
+        "Node name for S&R": "PreviewAny"
+      },
+      "widgets_values": [
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "id": 17,
+      "type": "APIcaller_HailuoVideo",
+      "pos": [
+        774.841312461935,
+        66.00222503771917
+      ],
+      "size": [
+        400,
+        340
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "label": "image_start",
+          "name": "image_start",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 33
+        },
+        {
+          "label": "image_end",
+          "name": "image_end",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 34
+        },
+        {
+          "label": "custom_provider",
+          "name": "custom_provider",
+          "shape": 7,
+          "type": "CUSTOM_PROVIDER",
+          "link": null
+        },
+        {
+          "label": "prompt",
+          "name": "prompt",
+          "type": "STRING",
+          "widget": {
+            "name": "prompt"
+          },
+          "link": null
+        },
+        {
+          "label": "provider",
+          "name": "provider",
+          "type": "COMBO",
+          "widget": {
+            "name": "provider"
+          },
+          "link": null
+        },
+        {
+          "label": "model",
+          "name": "model",
+          "type": "COMBO",
+          "widget": {
+            "name": "model"
+          },
+          "link": null
+        },
+        {
+          "label": "duration",
+          "name": "duration",
+          "type": "INT",
+          "widget": {
+            "name": "duration"
+          },
+          "link": null
+        },
+        {
+          "label": "resolution",
+          "name": "resolution",
+          "type": "COMBO",
+          "widget": {
+            "name": "resolution"
+          },
+          "link": null
+        },
+        {
+          "label": "prompt_optimizer",
+          "name": "prompt_optimizer",
+          "shape": 7,
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "prompt_optimizer"
+          },
+          "link": null
+        },
+        {
+          "label": "use_kie_upload",
+          "name": "use_kie_upload",
+          "shape": 7,
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "use_kie_upload"
+          },
+          "link": null
+        },
+        {
+          "label": "kie_api_key",
+          "name": "kie_api_key",
+          "shape": 7,
+          "type": "STRING",
+          "widget": {
+            "name": "kie_api_key"
+          },
+          "link": null
+        },
+        {
+          "label": "api_key",
+          "name": "api_key",
+          "shape": 7,
+          "type": "STRING",
+          "widget": {
+            "name": "api_key"
+          },
+          "link": 36
+        }
+      ],
+      "outputs": [
+        {
+          "label": "video",
+          "name": "video",
+          "type": "VIDEO",
+          "links": [
+            27
+          ]
+        },
+        {
+          "label": "task_id",
+          "name": "task_id",
+          "type": "STRING",
+          "links": []
+        },
+        {
+          "label": "response_info",
+          "name": "response_info",
+          "type": "STRING",
+          "links": [
+            40
+          ]
+        },
+        {
+          "label": "video_url",
+          "name": "video_url",
+          "type": "STRING",
+          "links": [
+            39
+          ]
+        }
+      ],
+      "properties": {
+        "aux_id": "RakuhaSociety/Comfyui_APIcaller",
+        "ver": "6cfc3bf6544cdd283276c0c896ad9375f0b09f88",
+        "Node name for S&R": "APIcaller_HailuoVideo",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.7"
+        }
+      },
+      "widgets_values": [
+        "make animate",
+        "lingke",
+        "MiniMax-Hailuo-2.3-Fast",
+        6,
+        "768P",
+        true,
+        false,
+        "",
+        ""
+      ]
+    }
+  ],
+  "links": [
+    [
+      27,
+      17,
+      0,
+      6,
+      0,
+      "VIDEO"
+    ],
+    [
+      33,
+      18,
+      0,
+      17,
+      0,
+      "IMAGE"
+    ],
+    [
+      34,
+      19,
+      0,
+      17,
+      1,
+      "IMAGE"
+    ],
+    [
+      35,
+      21,
+      1,
+      22,
+      0,
+      "STRING"
+    ],
+    [
+      36,
+      21,
+      0,
+      17,
+      11,
+      "STRING"
+    ],
+    [
+      39,
+      17,
+      3,
+      24,
+      0,
+      "STRING"
+    ],
+    [
+      40,
+      17,
+      2,
+      23,
+      0,
+      "STRING"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ue_links": [],
+    "links_added_by_ue": [],
+    "ds": {
+      "scale": 0.8390545288824572,
+      "offset": [
+        296.41816426050804,
+        13.091319971082271
+      ]
+    },
+    "frontendVersion": "1.41.20",
+    "VHS_latentpreview": false,
+    "VHS_latentpreviewrate": 0,
+    "VHS_MetadataImage": true,
+    "VHS_KeepIntermediate": true,
+    "workflowRendererVersion": "LG"
+  },
+  "version": 0.4
+}

@@ -12,8 +12,8 @@
 
 | 节点 | 说明 | 供应商 |
 |------|------|--------|
-| 🍌 Nano Banana Edit | 图像编辑（图生图） | Lingke / Kie / WaveSpeed |
-| 🍌 Nano Banana Text2Img | 文生图 | Lingke / Kie / WaveSpeed |
+| 🍌 Nano Banana Edit | 图像编辑（图生图） | 通过 Custom Provider 接入 |
+| 🍌 Nano Banana Text2Img | 文生图 | 通过 Custom Provider 接入 |
 | 🎬 Grok Video Generator | Grok 视频生成（支持多图） | Lingke / Kie |
 | 🎬 Sora 2 Video Generator | Sora 2 视频生成 | Lingke / Kie |
 | 🎬 Veo 3.1 Video Generator | Veo 3.1 视频生成 | Lingke / Kie |
@@ -24,8 +24,7 @@
 
 ### 🔑 特性
 
-- **多供应商切换** — 同一节点通过下拉菜单选择不同供应商
-- **Custom Provider** — 输入自定义 API Key + Base URL，接入任何兼容的第三方 API
+- **Custom Provider** — 输入自定义 API Key + Base URL，接入任何兼容的第三方 API（Nano Banana / OpenAI LLM 必须连接）
 - **API Key Pool** — 多 Key 轮盘，随机选取，分散调用压力
 - **批次模式** — Nano Banana 节点支持批量处理多张图像 / 多行提示词
 - **错误重试** — 调用失败自动重试，减少白图
@@ -42,13 +41,11 @@ pip install -r requirements.txt
 
 ### ⚙️ 配置
 
-#### 方式一：使用 Custom Provider 节点（推荐）
-直接在工作流中添加 `🔧 Custom Provider` 节点，输入你的 API Key 和 Base URL，连接到其他节点即可。
+在工作流中添加 `🔧 Custom Provider` 节点，输入你的 API Key 和 Base URL，连接到其他节点即可。
 
-#### 方式二：节点内输入
-每个节点都有 `api_key` 输入框，可直接填写密钥。
+视频节点（Grok / Sora2 / Veo3.1 / Hailuo）也支持节点内直接输入 `api_key`。
 
-#### 供应商默认 Base URL
+#### 常用供应商 Base URL
 
 | 供应商 | Base URL |
 |--------|----------|
@@ -106,8 +103,8 @@ A multi-provider ComfyUI custom node plugin integrating video generation, image 
 
 | Node | Description | Providers |
 |------|-------------|-----------|
-| 🍌 Nano Banana Edit | Image editing (img2img) | Lingke / Kie / WaveSpeed |
-| 🍌 Nano Banana Text2Img | Text to image | Lingke / Kie / WaveSpeed |
+| 🍌 Nano Banana Edit | Image editing (img2img) | Via Custom Provider |
+| 🍌 Nano Banana Text2Img | Text to image | Via Custom Provider |
 | 🎬 Grok Video Generator | Grok video generation (multi-image) | Lingke / Kie |
 | 🎬 Sora 2 Video Generator | Sora 2 video generation | Lingke / Kie |
 | 🎬 Veo 3.1 Video Generator | Veo 3.1 video generation | Lingke / Kie |
@@ -118,8 +115,7 @@ A multi-provider ComfyUI custom node plugin integrating video generation, image 
 
 ### 🔑 Features
 
-- **Multi-provider switching** — Select different providers from a dropdown within the same node
-- **Custom Provider** — Input custom API Key + Base URL to connect any compatible third-party API
+- **Custom Provider** — Input custom API Key + Base URL to connect any compatible third-party API (required for Nano Banana / OpenAI LLM)
 - **API Key Pool** — Multiple keys with random selection to distribute API call load
 - **Batch mode** — Nano Banana nodes support batch processing of multiple images / multi-line prompts
 - **Error retry** — Automatic retry on failure to reduce blank outputs
@@ -136,13 +132,11 @@ Restart ComfyUI to use.
 
 ### ⚙️ Configuration
 
-#### Option 1: Custom Provider node (Recommended)
 Add the `🔧 Custom Provider` node to your workflow, enter your API Key and Base URL, and connect it to other nodes.
 
-#### Option 2: Direct input
-Each node has an `api_key` input field where you can enter your key directly.
+Video nodes (Grok / Sora2 / Veo3.1 / Hailuo) also support entering `api_key` directly in the node.
 
-#### Default Provider Base URLs
+#### Common Provider Base URLs
 
 | Provider | Base URL |
 |----------|----------|

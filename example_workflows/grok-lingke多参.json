@@ -1,0 +1,606 @@
+{
+  "id": "0922b0cb-887b-48e1-aa07-2e2dc79e01ee",
+  "revision": 0,
+  "last_node_id": 22,
+  "last_link_id": 38,
+  "nodes": [
+    {
+      "id": 11,
+      "type": "LoadImage",
+      "pos": [
+        413.9641599534892,
+        -225.64032408663329
+      ],
+      "size": [
+        270,
+        314
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "label": "图像",
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            30
+          ]
+        },
+        {
+          "label": "遮罩",
+          "name": "MASK",
+          "type": "MASK",
+          "links": null
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.3.68",
+        "Node name for S&R": "LoadImage",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.5.1"
+        }
+      },
+      "widgets_values": [
+        "EV1-1引导.png",
+        "image"
+      ]
+    },
+    {
+      "id": 17,
+      "type": "LoadImage",
+      "pos": [
+        409.2129246044402,
+        121.73638372441624
+      ],
+      "size": [
+        270,
+        314
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "label": "图像",
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            31
+          ]
+        },
+        {
+          "label": "遮罩",
+          "name": "MASK",
+          "type": "MASK",
+          "links": null
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.3.68",
+        "Node name for S&R": "LoadImage",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.5.1"
+        }
+      },
+      "widgets_values": [
+        "人物-风间立绘-修.png",
+        "image"
+      ]
+    },
+    {
+      "id": 6,
+      "type": "SaveVideo",
+      "pos": [
+        1256.1663238578817,
+        -91.49388281804204
+      ],
+      "size": [
+        478,
+        664.551724137931
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {
+          "label": "video",
+          "name": "video",
+          "type": "VIDEO",
+          "link": 32
+        },
+        {
+          "label": "filename_prefix",
+          "name": "filename_prefix",
+          "type": "STRING",
+          "widget": {
+            "name": "filename_prefix"
+          },
+          "link": null
+        },
+        {
+          "label": "format",
+          "name": "format",
+          "type": "COMBO",
+          "widget": {
+            "name": "format"
+          },
+          "link": null
+        },
+        {
+          "label": "codec",
+          "name": "codec",
+          "type": "COMBO",
+          "widget": {
+            "name": "codec"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.3.68",
+        "Node name for S&R": "SaveVideo",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.4.1"
+        }
+      },
+      "widgets_values": [
+        "video/ComfyUI",
+        "mp4",
+        "h264"
+      ]
+    },
+    {
+      "id": 21,
+      "type": "PreviewAny",
+      "pos": [
+        789.1000708407596,
+        360.26450436337353
+      ],
+      "size": [
+        399.60735400929616,
+        112
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "label": "source",
+          "name": "source",
+          "type": "*",
+          "link": 37
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.17.2",
+        "Node name for S&R": "PreviewAny",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.7"
+        }
+      },
+      "widgets_values": [
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "id": 22,
+      "type": "LoadImage",
+      "pos": [
+        414.2129246044402,
+        493.8162210864133
+      ],
+      "size": [
+        270,
+        314.00000000000006
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "label": "图像",
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            38
+          ]
+        },
+        {
+          "label": "遮罩",
+          "name": "MASK",
+          "type": "MASK",
+          "links": null
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.3.68",
+        "Node name for S&R": "LoadImage",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.5.1"
+        }
+      },
+      "widgets_values": [
+        "人物-早川立绘-修.png",
+        "image"
+      ]
+    },
+    {
+      "id": 18,
+      "type": "APIcaller_GrokVideo",
+      "pos": [
+        787.5482471638818,
+        -93.09152630743623
+      ],
+      "size": [
+        403.2224724757268,
+        393.1733022501245
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "label": "image1",
+          "name": "image1",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 30
+        },
+        {
+          "label": "image2",
+          "name": "image2",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 31
+        },
+        {
+          "label": "image3",
+          "name": "image3",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 38
+        },
+        {
+          "label": "image4",
+          "name": "image4",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "label": "image5",
+          "name": "image5",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "label": "custom_provider",
+          "name": "custom_provider",
+          "shape": 7,
+          "type": "CUSTOM_PROVIDER",
+          "link": null
+        },
+        {
+          "label": "prompt",
+          "name": "prompt",
+          "type": "STRING",
+          "widget": {
+            "name": "prompt"
+          },
+          "link": null
+        },
+        {
+          "label": "provider",
+          "name": "provider",
+          "type": "COMBO",
+          "widget": {
+            "name": "provider"
+          },
+          "link": null
+        },
+        {
+          "label": "model",
+          "name": "model",
+          "shape": 7,
+          "type": "STRING",
+          "widget": {
+            "name": "model"
+          },
+          "link": null
+        },
+        {
+          "label": "aspect_ratio",
+          "name": "aspect_ratio",
+          "shape": 7,
+          "type": "COMBO",
+          "widget": {
+            "name": "aspect_ratio"
+          },
+          "link": null
+        },
+        {
+          "label": "size",
+          "name": "size",
+          "shape": 7,
+          "type": "COMBO",
+          "widget": {
+            "name": "size"
+          },
+          "link": null
+        },
+        {
+          "label": "duration",
+          "name": "duration",
+          "shape": 7,
+          "type": "INT",
+          "widget": {
+            "name": "duration"
+          },
+          "link": null
+        },
+        {
+          "label": "use_kie_upload",
+          "name": "use_kie_upload",
+          "shape": 7,
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "use_kie_upload"
+          },
+          "link": null
+        },
+        {
+          "label": "kie_api_key",
+          "name": "kie_api_key",
+          "shape": 7,
+          "type": "STRING",
+          "widget": {
+            "name": "kie_api_key"
+          },
+          "link": null
+        },
+        {
+          "label": "api_key",
+          "name": "api_key",
+          "shape": 7,
+          "type": "STRING",
+          "widget": {
+            "name": "api_key"
+          },
+          "link": 36
+        }
+      ],
+      "outputs": [
+        {
+          "label": "video",
+          "name": "video",
+          "type": "VIDEO",
+          "links": [
+            32
+          ]
+        },
+        {
+          "label": "task_id",
+          "name": "task_id",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "label": "response_info",
+          "name": "response_info",
+          "type": "STRING",
+          "links": []
+        },
+        {
+          "label": "video_url",
+          "name": "video_url",
+          "type": "STRING",
+          "links": []
+        }
+      ],
+      "properties": {
+        "aux_id": "RakuhaSociety/Comfyui_APIcaller",
+        "ver": "6cfc3bf6544cdd283276c0c896ad9375f0b09f88",
+        "Node name for S&R": "APIcaller_GrokVideo",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.7"
+        }
+      },
+      "widgets_values": [
+        "@img1是视频首帧。\n0-3秒画面：画面为@img1，在一片暴风雪中，两人手牵着手前进\n4-6秒画面：镜头切到紫发女生@img2上半身近景，紫发女生踉踉跄跄地跟着前进，面色带红，大口地喘气，每次喘气都会呼出白色的烟雾\n7-10秒画面：镜头切到橘发女生@img3的斜侧面下半身特写，橘发女生一步一个脚印的前进，镜头跟随",
+        "lingke",
+        "grok-video-3-10s",
+        "16:9",
+        "1080p",
+        10,
+        true,
+        "9dfd0b3a18850db4e0360b74b4d167e0",
+        ""
+      ]
+    },
+    {
+      "id": 20,
+      "type": "APIcaller_KeyPool",
+      "pos": [
+        283.49819482770516,
+        865.3537923145865
+      ],
+      "size": [
+        400,
+        240.00000000000023
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "label": "keys",
+          "name": "keys",
+          "type": "STRING",
+          "widget": {
+            "name": "keys"
+          },
+          "link": null
+        },
+        {
+          "label": "lock",
+          "name": "lock",
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "lock"
+          },
+          "link": null
+        },
+        {
+          "label": "note1",
+          "name": "note1",
+          "shape": 7,
+          "type": "STRING",
+          "widget": {
+            "name": "note1"
+          },
+          "link": null
+        },
+        {
+          "label": "note2",
+          "name": "note2",
+          "shape": 7,
+          "type": "STRING",
+          "widget": {
+            "name": "note2"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "label": "selected_key",
+          "name": "selected_key",
+          "type": "STRING",
+          "links": [
+            36
+          ]
+        },
+        {
+          "label": "info",
+          "name": "info",
+          "type": "STRING",
+          "links": [
+            37
+          ]
+        }
+      ],
+      "properties": {
+        "aux_id": "RakuhaSociety/Comfyui_APIcaller",
+        "ver": "6cfc3bf6544cdd283276c0c896ad9375f0b09f88",
+        "Node name for S&R": "APIcaller_KeyPool",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.7"
+        }
+      },
+      "widgets_values": [
+        "",
+        false,
+        "",
+        ""
+      ]
+    }
+  ],
+  "links": [
+    [
+      30,
+      11,
+      0,
+      18,
+      0,
+      "IMAGE"
+    ],
+    [
+      31,
+      17,
+      0,
+      18,
+      1,
+      "IMAGE"
+    ],
+    [
+      32,
+      18,
+      0,
+      6,
+      0,
+      "VIDEO"
+    ],
+    [
+      36,
+      20,
+      0,
+      18,
+      14,
+      "STRING"
+    ],
+    [
+      37,
+      20,
+      1,
+      21,
+      0,
+      "STRING"
+    ],
+    [
+      38,
+      22,
+      0,
+      18,
+      2,
+      "IMAGE"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ue_links": [],
+    "links_added_by_ue": [],
+    "ds": {
+      "scale": 0.5730855330116826,
+      "offset": [
+        722.487051086909,
+        500.97934252640607
+      ]
+    },
+    "frontendVersion": "1.41.20",
+    "VHS_latentpreview": false,
+    "VHS_latentpreviewrate": 0,
+    "VHS_MetadataImage": true,
+    "VHS_KeepIntermediate": true,
+    "workflowRendererVersion": "LG"
+  },
+  "version": 0.4
+}

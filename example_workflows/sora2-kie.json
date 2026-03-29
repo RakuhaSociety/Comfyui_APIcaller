@@ -1,0 +1,568 @@
+{
+  "id": "0922b0cb-887b-48e1-aa07-2e2dc79e01ee",
+  "revision": 0,
+  "last_node_id": 37,
+  "last_link_id": 82,
+  "nodes": [
+    {
+      "id": 31,
+      "type": "LoadImage",
+      "pos": [
+        387.0473990821108,
+        -390.3880827521054
+      ],
+      "size": [
+        270,
+        314
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "label": "图像",
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            75
+          ]
+        },
+        {
+          "label": "遮罩",
+          "name": "MASK",
+          "type": "MASK",
+          "links": null
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.7.0",
+        "Node name for S&R": "LoadImage",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.5.2"
+        }
+      },
+      "widgets_values": [
+        "镜头9-1备选.png",
+        "image"
+      ]
+    },
+    {
+      "id": 6,
+      "type": "SaveVideo",
+      "pos": [
+        1237.0972413975182,
+        -389.99003155837164
+      ],
+      "size": [
+        374,
+        349.61119381384947
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "label": "video",
+          "name": "video",
+          "type": "VIDEO",
+          "link": 77
+        },
+        {
+          "label": "filename_prefix",
+          "name": "filename_prefix",
+          "type": "STRING",
+          "widget": {
+            "name": "filename_prefix"
+          },
+          "link": null
+        },
+        {
+          "label": "format",
+          "name": "format",
+          "type": "COMBO",
+          "widget": {
+            "name": "format"
+          },
+          "link": null
+        },
+        {
+          "label": "codec",
+          "name": "codec",
+          "type": "COMBO",
+          "widget": {
+            "name": "codec"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.3.68",
+        "Node name for S&R": "SaveVideo",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.4.1"
+        }
+      },
+      "widgets_values": [
+        "video/ComfyUI",
+        "mp4",
+        "h264"
+      ]
+    },
+    {
+      "id": 35,
+      "type": "PreviewAny",
+      "pos": [
+        766.4284102983127,
+        135.27808754660882
+      ],
+      "size": [
+        399.60735400929616,
+        112
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "label": "source",
+          "name": "source",
+          "type": "*",
+          "link": 80
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.7"
+        },
+        "cnr_id": "comfy-core",
+        "ver": "0.17.2",
+        "Node name for S&R": "PreviewAny"
+      },
+      "widgets_values": [
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "id": 34,
+      "type": "APIcaller_KeyPool",
+      "pos": [
+        258.4428989777132,
+        -15.132334077125195
+      ],
+      "size": [
+        400,
+        240.00000000000048
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "label": "keys",
+          "name": "keys",
+          "type": "STRING",
+          "widget": {
+            "name": "keys"
+          },
+          "link": null
+        },
+        {
+          "label": "lock",
+          "name": "lock",
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "lock"
+          },
+          "link": null
+        },
+        {
+          "label": "note1",
+          "name": "note1",
+          "shape": 7,
+          "type": "STRING",
+          "widget": {
+            "name": "note1"
+          },
+          "link": null
+        },
+        {
+          "label": "note2",
+          "name": "note2",
+          "shape": 7,
+          "type": "STRING",
+          "widget": {
+            "name": "note2"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "label": "selected_key",
+          "name": "selected_key",
+          "type": "STRING",
+          "links": []
+        },
+        {
+          "label": "info",
+          "name": "info",
+          "type": "STRING",
+          "links": [
+            80
+          ]
+        }
+      ],
+      "properties": {
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.7"
+        },
+        "aux_id": "RakuhaSociety/Comfyui_APIcaller",
+        "ver": "6cfc3bf6544cdd283276c0c896ad9375f0b09f88",
+        "Node name for S&R": "APIcaller_KeyPool"
+      },
+      "widgets_values": [
+        "",
+        false,
+        "",
+        ""
+      ]
+    },
+    {
+      "id": 36,
+      "type": "PreviewAny",
+      "pos": [
+        1242.196383538502,
+        23.479957476890974
+      ],
+      "size": [
+        399.60735400929616,
+        112
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "label": "source",
+          "name": "source",
+          "type": "*",
+          "link": 81
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.7"
+        },
+        "cnr_id": "comfy-core",
+        "ver": "0.17.2",
+        "Node name for S&R": "PreviewAny"
+      },
+      "widgets_values": [
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "id": 37,
+      "type": "PreviewAny",
+      "pos": [
+        1247.196383538502,
+        200.1016996201499
+      ],
+      "size": [
+        399.60735400929616,
+        112
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {
+          "label": "source",
+          "name": "source",
+          "type": "*",
+          "link": 82
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.7"
+        },
+        "cnr_id": "comfy-core",
+        "ver": "0.17.2",
+        "Node name for S&R": "PreviewAny"
+      },
+      "widgets_values": [
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "id": 33,
+      "type": "APIcaller_Sora2Video",
+      "pos": [
+        763.4244872670015,
+        -390.4890147536962
+      ],
+      "size": [
+        390.150267324193,
+        454.2568990393604
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "label": "image",
+          "name": "image",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 75
+        },
+        {
+          "label": "custom_provider",
+          "name": "custom_provider",
+          "shape": 7,
+          "type": "CUSTOM_PROVIDER",
+          "link": null
+        },
+        {
+          "label": "prompt",
+          "name": "prompt",
+          "type": "STRING",
+          "widget": {
+            "name": "prompt"
+          },
+          "link": null
+        },
+        {
+          "label": "provider",
+          "name": "provider",
+          "type": "COMBO",
+          "widget": {
+            "name": "provider"
+          },
+          "link": null
+        },
+        {
+          "label": "orientation",
+          "name": "orientation",
+          "type": "COMBO",
+          "widget": {
+            "name": "orientation"
+          },
+          "link": null
+        },
+        {
+          "label": "model",
+          "name": "model",
+          "shape": 7,
+          "type": "STRING",
+          "widget": {
+            "name": "model"
+          },
+          "link": null
+        },
+        {
+          "label": "size",
+          "name": "size",
+          "shape": 7,
+          "type": "COMBO",
+          "widget": {
+            "name": "size"
+          },
+          "link": null
+        },
+        {
+          "label": "duration",
+          "name": "duration",
+          "shape": 7,
+          "type": "INT",
+          "widget": {
+            "name": "duration"
+          },
+          "link": null
+        },
+        {
+          "label": "watermark",
+          "name": "watermark",
+          "shape": 7,
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "watermark"
+          },
+          "link": null
+        },
+        {
+          "label": "use_kie_upload",
+          "name": "use_kie_upload",
+          "shape": 7,
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "use_kie_upload"
+          },
+          "link": null
+        },
+        {
+          "label": "kie_api_key",
+          "name": "kie_api_key",
+          "shape": 7,
+          "type": "STRING",
+          "widget": {
+            "name": "kie_api_key"
+          },
+          "link": null
+        },
+        {
+          "label": "api_key",
+          "name": "api_key",
+          "shape": 7,
+          "type": "STRING",
+          "widget": {
+            "name": "api_key"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "label": "video",
+          "name": "video",
+          "type": "VIDEO",
+          "links": [
+            77
+          ]
+        },
+        {
+          "label": "task_id",
+          "name": "task_id",
+          "type": "STRING",
+          "links": []
+        },
+        {
+          "label": "response_info",
+          "name": "response_info",
+          "type": "STRING",
+          "links": [
+            81
+          ]
+        },
+        {
+          "label": "video_url",
+          "name": "video_url",
+          "type": "STRING",
+          "links": [
+            82
+          ]
+        }
+      ],
+      "properties": {
+        "aux_id": "RakuhaSociety/Comfyui_APIcaller",
+        "ver": "6cfc3bf6544cdd283276c0c896ad9375f0b09f88",
+        "Node name for S&R": "APIcaller_Sora2Video",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.5.2"
+        }
+      },
+      "widgets_values": [
+        "请使用sora2的提示词",
+        "kie",
+        "landscape",
+        "sora-2-image-to-video-stable",
+        "small",
+        15,
+        false,
+        true,
+        "9dfd0b3a18850db4e0360b74b4d167e0",
+        ""
+      ]
+    }
+  ],
+  "links": [
+    [
+      75,
+      31,
+      0,
+      33,
+      0,
+      "IMAGE"
+    ],
+    [
+      77,
+      33,
+      0,
+      6,
+      0,
+      "VIDEO"
+    ],
+    [
+      80,
+      34,
+      1,
+      35,
+      0,
+      "STRING"
+    ],
+    [
+      81,
+      33,
+      2,
+      36,
+      0,
+      "STRING"
+    ],
+    [
+      82,
+      33,
+      3,
+      37,
+      0,
+      "STRING"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ue_links": [],
+    "links_added_by_ue": [],
+    "ds": {
+      "scale": 0.8390545288824651,
+      "offset": [
+        281.4504981812884,
+        524.9888926434282
+      ]
+    },
+    "frontendVersion": "1.41.20",
+    "VHS_latentpreview": false,
+    "VHS_latentpreviewrate": 0,
+    "VHS_MetadataImage": true,
+    "VHS_KeepIntermediate": true,
+    "workflowRendererVersion": "LG"
+  },
+  "version": 0.4
+}

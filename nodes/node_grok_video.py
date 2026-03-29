@@ -6,7 +6,6 @@ import torch
 from typing import Tuple, Optional, List
 import json
 
-from ..config import PROVIDER_LIST
 from ..providers import get_provider
 from ..utils import create_blank_image, save_video_to_temp, VideoAdapter, EmptyVideoAdapter
 import os
