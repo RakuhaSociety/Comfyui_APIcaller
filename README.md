@@ -65,6 +65,21 @@ pip install -r requirements.txt
 - 所有多批次输入（图像批次数 / prompt行数）必须一致
 - 单张图像和单行 prompt 会自动广播到所有批次
 
+#### Nano Banana 错误重试
+开启 `error_retry` 后，API 调用失败（返回空图/报错/下载失败等）会自动重试：
+- **max_retries** 设置最大重试次数（默认 3，范围 1-10）
+- 每次重试间隔 2 秒
+- 批次模式下每个批次独立重试
+- 关闭时不重试，失败直接返回白图 + 错误信息
+
+#### API Key Pool
+`🔑 API Key Pool` 节点用于管理多个 API 密钥，每次执行随机选取一个：
+- 填入多个 key（key1 ~ key5），留空的会被跳过
+- 每次运行随机选取一个可用 key 输出
+- 可附带 note1 / note2 备注信息
+- 输出的 key 可连接到各生成节点的 `api_key` 输入
+- 适合多 key 轮换，分散调用频率限制
+
 #### OpenAI LLM
 - 必须连接 `Custom Provider` 节点提供 API Key 和 Base URL
 - 支持图像输入（Vision），自动处理图像批次
@@ -143,6 +158,21 @@ When `batch_mode` is enabled:
 - **prompt** with multiple lines: each line corresponds to a batch
 - All multi-batch inputs (image batch count / prompt line count) must match
 - Single images and single-line prompts are automatically broadcast to all batches
+
+#### Nano Banana Error Retry
+When `error_retry` is enabled, failed API calls (empty result / errors / download failures) are automatically retried:
+- **max_retries** sets the maximum retry count (default 3, range 1-10)
+- 2-second delay between retries
+- In batch mode, each batch retries independently
+- When disabled, failures return a blank white image + error message immediately
+
+#### API Key Pool
+The `🔑 API Key Pool` node manages multiple API keys with random selection:
+- Enter multiple keys (key1 ~ key5); empty slots are skipped
+- A random available key is selected on each run
+- Optional note1 / note2 fields for labeling
+- Output key connects to the `api_key` input of any generation node
+- Useful for key rotation to distribute rate limits
 
 #### OpenAI LLM
 - Requires a `Custom Provider` node for API Key and Base URL
