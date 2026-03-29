@@ -81,17 +81,19 @@ class Veo31VideoNode:
             end_img = self._extract_single_image(image_end)
 
             image_urls = None
-            if provider_type == "lingke" and use_kie_upload:
-                # 使用 Kie 的上传接口获取 URL 再给 Lingke 调用
-                kie_provider = get_provider("kie")
-                if kie_api_key.strip():
-                    kie_provider.api_key = kie_api_key.strip()
+            if use_kie_upload or provider_type == "kie":
+                # 使用 Kie 的上传接口获取 URL
+                if provider_type == "kie":
+                    kie_provider = provider_instance
+                else:
+                    kie_provider = get_provider("kie")
+                    if kie_api_key.strip():
+                        kie_provider.api_key = kie_api_key.strip()
                 urls: List[str] = []
                 image_index = 0
                 for tensor in [start_img, end_img]:
                     if tensor is None:
                         continue
-                    # _upload_image 会处理单张
                     img_url, upload_error = kie_provider._upload_image(tensor, image_index)  # type: ignore[attr-defined]
                     if upload_error:
                         return (

@@ -75,25 +75,33 @@ class KieProvider(BaseProvider):
         if not self.api_key:
             return "", "API密钥未设置"
 
-        if image is None:
+        # 支持节点层预上传的 image_urls
+        pre_uploaded_urls = kwargs.get('image_urls')
+
+        if image is None and not pre_uploaded_urls:
             return "", "需要输入图像"
 
         try:
             if pbar:
                 pbar.update_absolute(5)
 
-            # 上传图像
-            image_urls = []
-            batch_size = image.shape[0]
-            for i in range(batch_size):
-                single_image = image[i:i+1]
-                print(f"[Kie] 正在上传图像 {i + 1}...")
-                img_url, upload_error = self._upload_image(single_image, i)
-                if upload_error:
-                    print(f"[Kie] 上传图像失败: {upload_error}")
-                    return "", f"上传图像失败: {upload_error}"
-                if img_url:
-                    image_urls.append(img_url)
+            # 如果节点层已经上传过，直接使用
+            if pre_uploaded_urls:
+                image_urls = pre_uploaded_urls
+                print(f"[Kie] 使用节点层预上传的 {len(image_urls)} 张图像URL")
+            else:
+                # 上传图像
+                image_urls = []
+                batch_size = image.shape[0]
+                for i in range(batch_size):
+                    single_image = image[i:i+1]
+                    print(f"[Kie] 正在上传图像 {i + 1}...")
+                    img_url, upload_error = self._upload_image(single_image, i)
+                    if upload_error:
+                        print(f"[Kie] 上传图像失败: {upload_error}")
+                        return "", f"上传图像失败: {upload_error}"
+                    if img_url:
+                        image_urls.append(img_url)
 
             if not image_urls:
                 return "", "未获取到上传后的图像URL"
@@ -233,21 +241,27 @@ class KieProvider(BaseProvider):
             if pbar:
                 pbar.update_absolute(5)
 
-            image_urls = []
-            image_index = 0
-            for img in [image_start, image_end]:
-                if img is not None:
-                    batch_size = img.shape[0]
-                    for i in range(batch_size):
-                        single_image = img[i:i+1]
-                        print(f"[Kie] 正在上传图像 {image_index + 1}...")
-                        img_url, upload_error = self._upload_image(single_image, image_index)
-                        if upload_error:
-                            print(f"[Kie] 上传图像失败: {upload_error}")
-                            return "", f"上传图像失败: {upload_error}"
-                        if img_url:
-                            image_urls.append(img_url)
-                            image_index += 1
+            # 支持节点层预上传的 image_urls
+            pre_uploaded_urls = kwargs.get('image_urls')
+            if pre_uploaded_urls:
+                image_urls = pre_uploaded_urls
+                print(f"[Kie] Veo3.1 使用节点层预上传的 {len(image_urls)} 张图像URL")
+            else:
+                image_urls = []
+                image_index = 0
+                for img in [image_start, image_end]:
+                    if img is not None:
+                        batch_size = img.shape[0]
+                        for i in range(batch_size):
+                            single_image = img[i:i+1]
+                            print(f"[Kie] 正在上传图像 {image_index + 1}...")
+                            img_url, upload_error = self._upload_image(single_image, image_index)
+                            if upload_error:
+                                print(f"[Kie] 上传图像失败: {upload_error}")
+                                return "", f"上传图像失败: {upload_error}"
+                            if img_url:
+                                image_urls.append(img_url)
+                                image_index += 1
 
             if pbar:
                 pbar.update_absolute(20)
@@ -941,19 +955,25 @@ class KieProvider(BaseProvider):
             if pbar:
                 pbar.update_absolute(5)
 
-            # 上传图像获取URL
-            image_urls = []
-            if image is not None:
-                batch_size = image.shape[0]
-                for i in range(batch_size):
-                    single_image = image[i:i+1]
-                    print(f"[Kie] 正在上传图像 {i + 1}...")
-                    img_url, upload_error = self._upload_image(single_image, i)
-                    if upload_error:
-                        print(f"[Kie] 上传图像失败: {upload_error}")
-                        return "", f"上传图像失败: {upload_error}"
-                    if img_url:
-                        image_urls.append(img_url)
+            # 支持节点层预上传的 image_urls
+            pre_uploaded_urls = kwargs.get('image_urls')
+            if pre_uploaded_urls:
+                image_urls = pre_uploaded_urls
+                print(f"[Kie] Sora2 使用节点层预上传的 {len(image_urls)} 张图像URL")
+            else:
+                # 上传图像获取URL
+                image_urls = []
+                if image is not None:
+                    batch_size = image.shape[0]
+                    for i in range(batch_size):
+                        single_image = image[i:i+1]
+                        print(f"[Kie] 正在上传图像 {i + 1}...")
+                        img_url, upload_error = self._upload_image(single_image, i)
+                        if upload_error:
+                            print(f"[Kie] 上传图像失败: {upload_error}")
+                            return "", f"上传图像失败: {upload_error}"
+                        if img_url:
+                            image_urls.append(img_url)
 
             if pbar:
                 pbar.update_absolute(20)
@@ -1103,28 +1123,37 @@ class KieProvider(BaseProvider):
             if pbar:
                 pbar.update_absolute(5)
 
-            # 上传图像获取URL
+            # 支持节点层预上传的 image_urls
+            pre_uploaded_urls = kwargs.get('image_urls')
             image_url = None
             end_image_url = None
-            if image_start is not None:
-                single_image = image_start[0:1]
-                print(f"[Kie] Hailuo 正在上传首帧图像...")
-                img_url, upload_error = self._upload_image(single_image, 0)
-                if upload_error:
-                    print(f"[Kie] Hailuo 上传首帧图像失败: {upload_error}")
-                    return "", f"上传首帧图像失败: {upload_error}"
-                if img_url:
-                    image_url = img_url
+            if pre_uploaded_urls:
+                print(f"[Kie] Hailuo 使用节点层预上传的 {len(pre_uploaded_urls)} 张图像URL")
+                if len(pre_uploaded_urls) >= 1:
+                    image_url = pre_uploaded_urls[0]
+                if len(pre_uploaded_urls) >= 2:
+                    end_image_url = pre_uploaded_urls[1]
+            else:
+                # 上传图像获取URL
+                if image_start is not None:
+                    single_image = image_start[0:1]
+                    print(f"[Kie] Hailuo 正在上传首帧图像...")
+                    img_url, upload_error = self._upload_image(single_image, 0)
+                    if upload_error:
+                        print(f"[Kie] Hailuo 上传首帧图像失败: {upload_error}")
+                        return "", f"上传首帧图像失败: {upload_error}"
+                    if img_url:
+                        image_url = img_url
 
-            if image_end is not None:
-                single_image = image_end[0:1]
-                print(f"[Kie] Hailuo 正在上传尾帧图像...")
-                img_url, upload_error = self._upload_image(single_image, 1)
-                if upload_error:
-                    print(f"[Kie] Hailuo 上传尾帧图像失败: {upload_error}")
-                    return "", f"上传尾帧图像失败: {upload_error}"
-                if img_url:
-                    end_image_url = img_url
+                if image_end is not None:
+                    single_image = image_end[0:1]
+                    print(f"[Kie] Hailuo 正在上传尾帧图像...")
+                    img_url, upload_error = self._upload_image(single_image, 1)
+                    if upload_error:
+                        print(f"[Kie] Hailuo 上传尾帧图像失败: {upload_error}")
+                        return "", f"上传尾帧图像失败: {upload_error}"
+                    if img_url:
+                        end_image_url = img_url
 
             if pbar:
                 pbar.update_absolute(20)

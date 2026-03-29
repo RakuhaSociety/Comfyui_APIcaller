@@ -79,10 +79,14 @@ class GrokVideoNode:
                 
             # 图像URL转换（通过Kie上传）
             image_urls: Optional[List[str]] = None
-            if provider_type == "lingke" and use_kie_upload and all_images:
-                kie_provider = get_provider("kie")
-                if kie_api_key.strip():
-                    kie_provider.api_key = kie_api_key.strip()
+            if all_images and (use_kie_upload or provider_type == "kie"):
+                # Kie provider 始终需要先上传图片获取URL
+                if provider_type == "kie":
+                    kie_provider = provider_instance
+                else:
+                    kie_provider = get_provider("kie")
+                    if kie_api_key.strip():
+                        kie_provider.api_key = kie_api_key.strip()
                 urls: List[str] = []
                 for i, img in enumerate(all_images):
                     single_image = img[0:1]

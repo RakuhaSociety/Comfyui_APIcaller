@@ -66,10 +66,13 @@ class Sora2VideoNode:
             
             # 图像URL转换（通过Kie上传）
             image_urls: Optional[List[str]] = None
-            if provider_type == "lingke" and use_kie_upload and image is not None:
-                kie_provider = get_provider("kie")
-                if kie_api_key.strip():
-                    kie_provider.api_key = kie_api_key.strip()
+            if image is not None and (use_kie_upload or provider_type == "kie"):
+                if provider_type == "kie":
+                    kie_provider = provider_instance
+                else:
+                    kie_provider = get_provider("kie")
+                    if kie_api_key.strip():
+                        kie_provider.api_key = kie_api_key.strip()
                 urls: List[str] = []
                 batch_size = image.shape[0]
                 for i in range(batch_size):
