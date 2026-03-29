@@ -103,7 +103,16 @@ class GrokVideoNode:
             merged_image = None
             if all_images:
                 tensors = [img[0:1] for img in all_images]
-                merged_image = torch.cat(tensors, dim=0)
+                # 统一尺寸到第一张图的大小，避免 torch.cat 维度不匹配
+                target_h, target_w = tensors[0].shape[1], tensors[0].shape[2]
+                resized = []
+                for t in tensors:
+                    if t.shape[1] != target_h or t.shape[2] != target_w:
+                        t = torch.nn.functional.interpolate(
+                            t.permute(0, 3, 1, 2), size=(target_h, target_w), mode="bilinear", align_corners=False
+                        ).permute(0, 2, 3, 1)
+                    resized.append(t)
+                merged_image = torch.cat(resized, dim=0)
 
             # 调用视频生成API
             video_url = ""
