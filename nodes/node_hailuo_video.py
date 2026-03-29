@@ -23,17 +23,7 @@ class HailuoVideoNode:
             "required": {
                 "prompt": ("STRING", {"multiline": True, "default": "make animate"}),
                 "custom_provider": ("CUSTOM_PROVIDER",),
-                "model": (
-                    [
-                        "MiniMax-Hailuo-2.3-Fast",
-                        "MiniMax-Hailuo-2.3",
-                        "2-3-image-to-video-standard",
-                        "2-3-image-to-video-pro",
-                        "02-image-to-video-standard",
-                        "02-image-to-video-pro",
-                    ],
-                    {"default": "MiniMax-Hailuo-2.3-Fast"},
-                ),
+                "model": ("STRING", {"default": "MiniMax-Hailuo-2.3-Fast", "multiline": False, "placeholder": "如 MiniMax-Hailuo-2.3-Fast"}),
                 "duration": ("INT", {"default": 10, "min": 1, "max": 30, "step": 1}),
                 "resolution": (["768P", "1080P"], {"default": "768P"}),
             },

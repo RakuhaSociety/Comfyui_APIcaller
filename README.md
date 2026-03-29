@@ -14,17 +14,21 @@
 |------|------|--------|
 | 🍌 Nano Banana Edit | 图像编辑（图生图） | 通过 Custom Provider 接入 |
 | 🍌 Nano Banana Text2Img | 文生图 | 通过 Custom Provider 接入 |
-| 🎬 Grok Video Generator | Grok 视频生成（支持多图） | Lingke / Kie |
-| 🎬 Sora 2 Video Generator | Sora 2 视频生成 | Lingke / Kie |
-| 🎬 Veo 3.1 Video Generator | Veo 3.1 视频生成 | Lingke / Kie |
-| 🎬 Hailuo Video Generator | 海螺视频生成 | Lingke / Kie |
-| 🤖 OpenAI LLM | 通用 OpenAI 格式 LLM 对话（支持 Vision） | 任意兼容 OpenAI API 的服务 |
-| 🔧 Custom Provider | 自定义 API Key + Base URL | — |
+| 🎬 Grok Video Generator | Grok 视频生成（支持多图） | 通过 Custom Provider 接入 |
+| 🎬 Sora 2 Video Generator | Sora 2 视频生成 | 通过 Custom Provider 接入 |
+| 🎬 Veo 3.1 Video Generator | Veo 3.1 视频生成 | 通过 Custom Provider 接入 |
+| 🎬 Hailuo Video Generator | 海螺视频生成 | 通过 Custom Provider 接入 |
+| 🤖 OpenAI LLM | 通用 OpenAI 格式 LLM 对话（支持 Vision） | 通过 Custom Provider 接入 |
+| 🔧 Custom Provider | 自定义 API Key + Base URL + 供应商类型 | — |
 | 🔑 API Key Pool | API 密钥池，随机选取 | — |
 
 ### 🔑 特性
 
-- **Custom Provider** — 输入自定义 API Key + Base URL，接入任何兼容的第三方 API（Nano Banana / OpenAI LLM 必须连接）
+- **Custom Provider** — 输入自定义 API Key + Base URL + 供应商类型（`provider_type`），所有节点统一通过此节点接入
+  - `lingke` — 灵客
+  - `kie` — Kie（视频节点自动使用 Kie 上传接口）
+  - `wavespeed` — WaveSpeed
+  - `openai` — 标准 OpenAI 格式（用于 LLM 节点）
 - **API Key Pool** — 多 Key 轮盘，随机选取，分散调用压力
 - **批次模式** — Nano Banana 节点支持批量处理多张图像 / 多行提示词
 - **错误重试** — 调用失败自动重试，减少白图
@@ -41,9 +45,9 @@ pip install -r requirements.txt
 
 ### ⚙️ 配置
 
-在工作流中添加 `🔧 Custom Provider` 节点，输入你的 API Key 和 Base URL，连接到其他节点即可。
+在工作流中添加 `🔧 Custom Provider` 节点，输入你的 API Key、Base URL，并选择 `provider_type`（供应商类型），连接到其他节点即可。
 
-视频节点（Grok / Sora2 / Veo3.1 / Hailuo）也支持节点内直接输入 `api_key`。
+所有视频节点和 LLM 节点均通过 Custom Provider 统一配置，不再需要在节点内单独填写 api_key。
 
 #### 常用供应商 Base URL
 
@@ -93,6 +97,25 @@ pip install -r requirements.txt
 
 MIT License
 
+### 📂 示例工作流
+
+`example_workflows/` 目录下提供了多个预设工作流，导入 ComfyUI 即可使用：
+
+| 文件 | 说明 |
+|------|------|
+| banana2-kie.json | Nano Banana 图编辑 (Kie) |
+| banana2-lingke.json | Nano Banana 图编辑 (Lingke) |
+| banana2T2I-lingke.json | Nano Banana 文生图 (Lingke) |
+| grok-lingke多参.json | Grok 多图视频 (Lingke) |
+| hailuo2_3仅首-kie.json | Hailuo 2.3 仅首帧 (Kie) |
+| hailuo2首尾-kie.json | Hailuo 2 首尾帧 (Kie) |
+| LLM-guiji.json | OpenAI LLM 对话 |
+| veo-lingke.json | Veo 3.1 视频 (Lingke) |
+| VLM-guiji.json | Vision LLM 图像理解 |
+| 多图VLM-guiji.json | 多图 Vision LLM |
+| 多图多重banana2-lingke.json | 多图批量 Banana (Lingke) |
+| 多提示词多重banana2-lingke.json | 多提示词批量 Banana (Lingke) |
+
 ---
 
 ## English
@@ -105,17 +128,21 @@ A multi-provider ComfyUI custom node plugin integrating video generation, image 
 |------|-------------|-----------|
 | 🍌 Nano Banana Edit | Image editing (img2img) | Via Custom Provider |
 | 🍌 Nano Banana Text2Img | Text to image | Via Custom Provider |
-| 🎬 Grok Video Generator | Grok video generation (multi-image) | Lingke / Kie |
-| 🎬 Sora 2 Video Generator | Sora 2 video generation | Lingke / Kie |
-| 🎬 Veo 3.1 Video Generator | Veo 3.1 video generation | Lingke / Kie |
-| 🎬 Hailuo Video Generator | Hailuo video generation | Lingke / Kie |
-| 🤖 OpenAI LLM | Universal OpenAI-format LLM chat (Vision support) | Any OpenAI-compatible API |
-| 🔧 Custom Provider | Custom API Key + Base URL | — |
+| 🎬 Grok Video Generator | Grok video generation (multi-image) | Via Custom Provider |
+| 🎬 Sora 2 Video Generator | Sora 2 video generation | Via Custom Provider |
+| 🎬 Veo 3.1 Video Generator | Veo 3.1 video generation | Via Custom Provider |
+| 🎬 Hailuo Video Generator | Hailuo video generation | Via Custom Provider |
+| 🤖 OpenAI LLM | Universal OpenAI-format LLM chat (Vision support) | Via Custom Provider |
+| 🔧 Custom Provider | Custom API Key + Base URL + Provider Type | — |
 | 🔑 API Key Pool | API key pool with random selection | — |
 
 ### 🔑 Features
 
-- **Custom Provider** — Input custom API Key + Base URL to connect any compatible third-party API (required for Nano Banana / OpenAI LLM)
+- **Custom Provider** — Input custom API Key + Base URL + Provider Type (`provider_type`) to connect any compatible third-party API
+  - `lingke` — Lingke
+  - `kie` — Kie (video nodes auto-use Kie upload API)
+  - `wavespeed` — WaveSpeed
+  - `openai` — Standard OpenAI format (for LLM node)
 - **API Key Pool** — Multiple keys with random selection to distribute API call load
 - **Batch mode** — Nano Banana nodes support batch processing of multiple images / multi-line prompts
 - **Error retry** — Automatic retry on failure to reduce blank outputs
@@ -132,9 +159,9 @@ Restart ComfyUI to use.
 
 ### ⚙️ Configuration
 
-Add the `🔧 Custom Provider` node to your workflow, enter your API Key and Base URL, and connect it to other nodes.
+Add the `🔧 Custom Provider` node to your workflow, enter your API Key, Base URL, and select the `provider_type`, then connect it to other nodes.
 
-Video nodes (Grok / Sora2 / Veo3.1 / Hailuo) also support entering `api_key` directly in the node.
+All video nodes and the LLM node are configured through Custom Provider — no need to enter api_key within individual nodes.
 
 #### Common Provider Base URLs
 
@@ -183,3 +210,7 @@ To add a new API provider:
 ### 📄 License
 
 MIT License
+
+### 📂 Example Workflows
+
+The `example_workflows/` directory contains preset workflows that can be imported into ComfyUI directly. See the Chinese section above for the full file list.

@@ -5,65 +5,6 @@
   "last_link_id": 6,
   "nodes": [
     {
-      "id": 2,
-      "type": "APIcaller_Settings",
-      "pos": [
-        960.8464063086417,
-        2117.7492430692296
-      ],
-      "size": [
-        270,
-        82
-      ],
-      "flags": {},
-      "order": 2,
-      "mode": 0,
-      "inputs": [
-        {
-          "label": "api_key",
-          "name": "api_key",
-          "type": "STRING",
-          "widget": {
-            "name": "api_key"
-          },
-          "link": 2
-        },
-        {
-          "label": "base_url",
-          "name": "base_url",
-          "type": "STRING",
-          "widget": {
-            "name": "base_url"
-          },
-          "link": null
-        }
-      ],
-      "outputs": [
-        {
-          "label": "custom_provider",
-          "name": "custom_provider",
-          "type": "CUSTOM_PROVIDER",
-          "links": [
-            1
-          ]
-        }
-      ],
-      "properties": {
-        "aux_id": "RakuhaSociety/Comfyui_APIcaller",
-        "ver": "6cfc3bf6544cdd283276c0c896ad9375f0b09f88",
-        "Node name for S&R": "APIcaller_Settings",
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "input_ue_unconnectable": {},
-          "version": "7.7"
-        }
-      },
-      "widgets_values": [
-        "",
-        "https://api.siliconflow.cn"
-      ]
-    },
-    {
       "id": 4,
       "type": "PreviewAny",
       "pos": [
@@ -139,52 +80,6 @@
         null,
         null,
         null
-      ]
-    },
-    {
-      "id": 7,
-      "type": "LoadImage",
-      "pos": [
-        968.8490737339239,
-        2425.910306677079
-      ],
-      "size": [
-        270,
-        314
-      ],
-      "flags": {},
-      "order": 0,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "label": "图像",
-          "name": "IMAGE",
-          "type": "IMAGE",
-          "links": [
-            6
-          ]
-        },
-        {
-          "label": "遮罩",
-          "name": "MASK",
-          "type": "MASK",
-          "links": null
-        }
-      ],
-      "properties": {
-        "cnr_id": "comfy-core",
-        "ver": "0.17.2",
-        "Node name for S&R": "LoadImage",
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "input_ue_unconnectable": {},
-          "version": "7.7"
-        }
-      },
-      "widgets_values": [
-        "00009-1947001331.png",
-        "image"
       ]
     },
     {
@@ -304,7 +199,7 @@
       ],
       "properties": {
         "aux_id": "RakuhaSociety/Comfyui_APIcaller",
-        "ver": "6cfc3bf6544cdd283276c0c896ad9375f0b09f88",
+        "ver": "e34e7e87648d9d43a6d55b74305e10cb84881f08",
         "Node name for S&R": "APIcaller_OpenAILLM",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -319,7 +214,7 @@
         0.7,
         4096,
         1,
-        761595322,
+        1484796701,
         "randomize"
       ]
     },
@@ -363,6 +258,75 @@
       ]
     },
     {
+      "id": 2,
+      "type": "APIcaller_Settings",
+      "pos": [
+        960.8464063086417,
+        2117.7492430692296
+      ],
+      "size": [
+        270,
+        106
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "label": "api_key",
+          "name": "api_key",
+          "type": "STRING",
+          "widget": {
+            "name": "api_key"
+          },
+          "link": 2
+        },
+        {
+          "label": "base_url",
+          "name": "base_url",
+          "type": "STRING",
+          "widget": {
+            "name": "base_url"
+          },
+          "link": null
+        },
+        {
+          "label": "provider_type",
+          "name": "provider_type",
+          "type": "COMBO",
+          "widget": {
+            "name": "provider_type"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "label": "custom_provider",
+          "name": "custom_provider",
+          "type": "CUSTOM_PROVIDER",
+          "links": [
+            1
+          ]
+        }
+      ],
+      "properties": {
+        "aux_id": "RakuhaSociety/Comfyui_APIcaller",
+        "ver": "e34e7e87648d9d43a6d55b74305e10cb84881f08",
+        "Node name for S&R": "APIcaller_Settings",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.7"
+        }
+      },
+      "widgets_values": [
+        "",
+        "https://api.siliconflow.cn",
+        "openai"
+      ]
+    },
+    {
       "id": 3,
       "type": "APIcaller_KeyPool",
       "pos": [
@@ -374,7 +338,7 @@
         240
       ],
       "flags": {},
-      "order": 1,
+      "order": 0,
       "mode": 0,
       "inputs": [
         {
@@ -436,7 +400,7 @@
       ],
       "properties": {
         "aux_id": "RakuhaSociety/Comfyui_APIcaller",
-        "ver": "6cfc3bf6544cdd283276c0c896ad9375f0b09f88",
+        "ver": "e34e7e87648d9d43a6d55b74305e10cb84881f08",
         "Node name for S&R": "APIcaller_KeyPool",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -449,6 +413,52 @@
         false,
         "",
         ""
+      ]
+    },
+    {
+      "id": 7,
+      "type": "LoadImage",
+      "pos": [
+        968.8490737339239,
+        2425.910306677079
+      ],
+      "size": [
+        270,
+        314
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "label": "图像",
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            6
+          ]
+        },
+        {
+          "label": "遮罩",
+          "name": "MASK",
+          "type": "MASK",
+          "links": null
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.17.2",
+        "Node name for S&R": "LoadImage",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.7"
+        }
+      },
+      "widgets_values": [
+        "01.jpg",
+        "image"
       ]
     }
   ],
@@ -509,10 +519,10 @@
     "ue_links": [],
     "links_added_by_ue": [],
     "ds": {
-      "scale": 1.0610764609500798,
+      "scale": 0.7972024500000594,
       "offset": [
-        -203.01048727196115,
-        -1881.4075364369576
+        -121.544077155894,
+        -1799.2509727998643
       ]
     },
     "frontendVersion": "1.41.20",

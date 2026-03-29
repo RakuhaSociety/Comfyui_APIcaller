@@ -3,12 +3,13 @@
 """
 
 
-PROVIDER_TYPE_LIST = ["lingke", "kie", "wavespeed"]
+PROVIDER_TYPE_LIST = ["lingke", "kie", "wavespeed", "openai"]
 
 PROVIDER_TYPE_DISPLAY = {
     "lingke": "Lingke (灵客)",
     "kie": "Kie",
     "wavespeed": "WaveSpeed",
+    "openai": "OpenAI (标准格式)",
 }
 
 

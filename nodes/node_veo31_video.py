@@ -6,10 +6,10 @@ import torch
 from typing import Tuple, Optional, List
 import json
 import os
+import random
 
 from ..config import create_provider_instance
 from ..providers import get_provider
-from ..providers.provider_lingke import LingkeProvider
 from ..utils import save_video_to_temp, VideoAdapter, EmptyVideoAdapter
 
 
@@ -24,7 +24,7 @@ class Veo31VideoNode:
             "required": {
                 "prompt": ("STRING", {"multiline": True, "default": "make animate"}),
                 "custom_provider": ("CUSTOM_PROVIDER",),
-                "model": (LingkeProvider.VEO31_MODELS, {"default": LingkeProvider.VEO31_MODELS[0]}),
+                "model": ("STRING", {"default": "veo3.1-fast", "multiline": False, "placeholder": "如 veo3.1-fast, veo3.1-pro"}),
                 "aspect_ratio": (["16:9", "9:16", "1:1", "3:2", "2:3"], {"default": "16:9"}),
             },
             "optional": {
@@ -36,7 +36,8 @@ class Veo31VideoNode:
                 "use_kie_upload": ("BOOLEAN", {"default": False}),
                 "kie_api_key": ("STRING", {"default": "", "placeholder": "Kie API Key，用于上传取URL"}),
                 "enable_translation": ("BOOLEAN", {"default": True}),
-                "seeds": ("INT", {"default": 0, "min": 0, "max": 2**31-1}),
+                "seed_mode": (["random", "fixed"], {"default": "random"}),
+                "seeds": ("INT", {"default": 10000, "min": 10000, "max": 99999}),
             }
         }
 
@@ -65,8 +66,12 @@ class Veo31VideoNode:
         use_kie_upload: bool = False,
         kie_api_key: str = "",
         enable_translation: bool = True,
-        seeds: int = 0,
+        seed_mode: str = "random",
+        seeds: int = 10000,
     ):
+        if seed_mode == "random":
+            seeds = random.randint(10000, 99999)
+
         try:
             # 使用自定义供应商
             if not custom_provider.get("api_key") or not custom_provider.get("base_url"):
