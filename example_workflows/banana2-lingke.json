@@ -1,139 +1,22 @@
 {
   "id": "d4080a4d-bc24-443c-90d2-1d8942255974",
   "revision": 0,
-  "last_node_id": 22,
-  "last_link_id": 34,
+  "last_node_id": 24,
+  "last_link_id": 45,
   "nodes": [
-    {
-      "id": 20,
-      "type": "PreviewAny",
-      "pos": [
-        1917.5686947538104,
-        2620.3046016576345
-      ],
-      "size": [
-        210,
-        112
-      ],
-      "flags": {},
-      "order": 8,
-      "mode": 0,
-      "inputs": [
-        {
-          "label": "source",
-          "name": "source",
-          "type": "*",
-          "link": 32
-        }
-      ],
-      "outputs": [],
-      "properties": {
-        "cnr_id": "comfy-core",
-        "ver": "0.17.2",
-        "Node name for S&R": "PreviewAny",
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "input_ue_unconnectable": {},
-          "version": "7.7"
-        }
-      },
-      "widgets_values": [
-        null,
-        null,
-        null
-      ]
-    },
-    {
-      "id": 18,
-      "type": "PreviewAny",
-      "pos": [
-        1334.2850601223433,
-        2466.5719706504515
-      ],
-      "size": [
-        390.61911375208433,
-        112
-      ],
-      "flags": {},
-      "order": 4,
-      "mode": 0,
-      "inputs": [
-        {
-          "label": "source",
-          "name": "source",
-          "type": "*",
-          "link": 21
-        }
-      ],
-      "outputs": [],
-      "properties": {
-        "cnr_id": "comfy-core",
-        "ver": "0.17.2",
-        "Node name for S&R": "PreviewAny",
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "input_ue_unconnectable": {},
-          "version": "7.7"
-        }
-      },
-      "widgets_values": [
-        null,
-        null,
-        null
-      ]
-    },
-    {
-      "id": 19,
-      "type": "PreviewAny",
-      "pos": [
-        1916.5320116866778,
-        2451.325261715008
-      ],
-      "size": [
-        210,
-        112
-      ],
-      "flags": {},
-      "order": 7,
-      "mode": 0,
-      "inputs": [
-        {
-          "label": "source",
-          "name": "source",
-          "type": "*",
-          "link": 31
-        }
-      ],
-      "outputs": [],
-      "properties": {
-        "cnr_id": "comfy-core",
-        "ver": "0.17.2",
-        "Node name for S&R": "PreviewAny",
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "input_ue_unconnectable": {},
-          "version": "7.7"
-        }
-      },
-      "widgets_values": [
-        null,
-        null,
-        null
-      ]
-    },
     {
       "id": 21,
       "type": "Image Comparer (rgthree)",
       "pos": [
-        1919.432878648634,
-        2220.6881602432145
+        1869.257418199412,
+        2238.9337822247503
       ],
       "size": [
         236.18136322576484,
         179.49127227228837
       ],
       "flags": {},
-      "order": 6,
+      "order": 7,
       "mode": 0,
       "inputs": [
         {
@@ -141,7 +24,7 @@
           "label": "图像_A",
           "name": "image_a",
           "type": "IMAGE",
-          "link": 33
+          "link": 44
         },
         {
           "dir": 3,
@@ -167,12 +50,12 @@
           {
             "name": "A",
             "selected": true,
-            "url": "/api/view?filename=rgthree.compare._temp_cpxnd_00001_.png&type=temp&subfolder=&rand=0.9673443986630486"
+            "url": "/api/view?filename=rgthree.compare._temp_pcfhf_00001_.png&type=temp&subfolder=&rand=0.628705234426016"
           },
           {
             "name": "B",
             "selected": true,
-            "url": "/api/view?filename=rgthree.compare._temp_cpxnd_00002_.png&type=temp&subfolder=&rand=0.6258741035134522"
+            "url": "/api/view?filename=rgthree.compare._temp_pcfhf_00002_.png&type=temp&subfolder=&rand=0.9163318746510258"
           }
         ]
       ]
@@ -181,8 +64,8 @@
       "id": 3,
       "type": "LoadImage",
       "pos": [
-        799.066035639089,
-        2298.1863138182503
+        953.0134711082916,
+        2461.25656027822
       ],
       "size": [
         270,
@@ -217,7 +100,7 @@
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
-            28
+            41
           ]
         },
         {
@@ -246,8 +129,8 @@
       "id": 2,
       "type": "LoadImage",
       "pos": [
-        799.0660356390897,
-        1913.5768959120237
+        953.0134711082923,
+        2076.6471423719945
       ],
       "size": [
         270,
@@ -282,8 +165,8 @@
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
-            27,
-            34
+            34,
+            40
           ]
         },
         {
@@ -304,38 +187,215 @@
         }
       },
       "widgets_values": [
-        "EV0-2-4-2参考.png",
+        "“在我热爱的世界里游荡”_11_Jibinbin_来自小红书网页版.jpg",
         "image"
       ]
     },
     {
-      "id": 22,
-      "type": "APIcaller_NanoBananaEdit",
+      "id": 20,
+      "type": "PreviewAny",
       "pos": [
-        1329.5787159816741,
-        1916.6624536712454
+        1874.2353425476645,
+        2480.04138267458
       ],
       "size": [
-        400,
-        504
+        210,
+        112
+      ],
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [
+        {
+          "label": "source",
+          "name": "source",
+          "type": "*",
+          "link": 45
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.17.2",
+        "Node name for S&R": "PreviewAny",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.7"
+        }
+      },
+      "widgets_values": [
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "id": 18,
+      "type": "PreviewAny",
+      "pos": [
+        1345.1240999307493,
+        2449.2716999578265
+      ],
+      "size": [
+        395.1805192474678,
+        112
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "label": "source",
+          "name": "source",
+          "type": "*",
+          "link": 21
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.17.2",
+        "Node name for S&R": "PreviewAny",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.7"
+        }
+      },
+      "widgets_values": [
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "id": 7,
+      "type": "PreviewImage",
+      "pos": [
+        1866.1261532753006,
+        1938.983277739921
+      ],
+      "size": [
+        239.7388763196309,
+        258
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {
+          "label": "图像",
+          "name": "images",
+          "type": "IMAGE",
+          "link": 43
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.7.0",
+        "Node name for S&R": "PreviewImage",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.5.2"
+        }
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 23,
+      "type": "APIcaller_Settings",
+      "pos": [
+        950.0128837779885,
+        1934.6211659309704
+      ],
+      "size": [
+        270,
+        82
       ],
       "flags": {},
       "order": 3,
       "mode": 0,
       "inputs": [
         {
+          "label": "api_key",
+          "name": "api_key",
+          "type": "STRING",
+          "widget": {
+            "name": "api_key"
+          },
+          "link": 36
+        },
+        {
+          "label": "base_url",
+          "name": "base_url",
+          "type": "STRING",
+          "widget": {
+            "name": "base_url"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "label": "custom_provider",
+          "name": "custom_provider",
+          "type": "CUSTOM_PROVIDER",
+          "links": [
+            42
+          ]
+        }
+      ],
+      "properties": {
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {}
+        },
+        "aux_id": "RakuhaSociety/Comfyui_APIcaller",
+        "ver": "aecee449d44b3af9e9986bf95c1102e1d7477483",
+        "Node name for S&R": "APIcaller_Settings"
+      },
+      "widgets_values": [
+        "",
+        "https://lingkeapi.com"
+      ]
+    },
+    {
+      "id": 24,
+      "type": "APIcaller_NanoBananaEdit",
+      "pos": [
+        1339.5825265159535,
+        1936.8968403977665
+      ],
+      "size": [
+        400,
+        456
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "label": "custom_provider",
+          "name": "custom_provider",
+          "type": "CUSTOM_PROVIDER",
+          "link": 42
+        },
+        {
           "label": "image1",
           "name": "image1",
           "shape": 7,
           "type": "IMAGE",
-          "link": 27
+          "link": 40
         },
         {
           "label": "image2",
           "name": "image2",
           "shape": 7,
           "type": "IMAGE",
-          "link": 28
+          "link": 41
         },
         {
           "label": "image3",
@@ -352,27 +412,11 @@
           "link": null
         },
         {
-          "label": "custom_provider",
-          "name": "custom_provider",
-          "shape": 7,
-          "type": "CUSTOM_PROVIDER",
-          "link": null
-        },
-        {
           "label": "prompt",
           "name": "prompt",
           "type": "STRING",
           "widget": {
             "name": "prompt"
-          },
-          "link": null
-        },
-        {
-          "label": "provider",
-          "name": "provider",
-          "type": "COMBO",
-          "widget": {
-            "name": "provider"
           },
           "link": null
         },
@@ -415,16 +459,6 @@
             "name": "output_format"
           },
           "link": null
-        },
-        {
-          "label": "api_key",
-          "name": "api_key",
-          "shape": 7,
-          "type": "STRING",
-          "widget": {
-            "name": "api_key"
-          },
-          "link": 29
         },
         {
           "label": "temperature",
@@ -503,8 +537,8 @@
           "name": "image",
           "type": "IMAGE",
           "links": [
-            30,
-            33
+            43,
+            44
           ]
         },
         {
@@ -512,39 +546,34 @@
           "name": "response",
           "type": "STRING",
           "links": [
-            31
+            45
           ]
         },
         {
           "label": "image_url",
           "name": "image_url",
           "type": "STRING",
-          "links": [
-            32
-          ]
+          "links": null
         }
       ],
       "properties": {
-        "aux_id": "RakuhaSociety/Comfyui_APIcaller",
-        "ver": "6cfc3bf6544cdd283276c0c896ad9375f0b09f88",
-        "Node name for S&R": "APIcaller_NanoBananaEdit",
         "ue_properties": {
           "widget_ue_connectable": {},
-          "input_ue_unconnectable": {},
-          "version": "7.7"
-        }
+          "input_ue_unconnectable": {}
+        },
+        "aux_id": "RakuhaSociety/Comfyui_APIcaller",
+        "ver": "aecee449d44b3af9e9986bf95c1102e1d7477483",
+        "Node name for S&R": "APIcaller_NanoBananaEdit"
       },
       "widgets_values": [
         "Edit this image...",
-        "lingke",
         "gemini-3.1-flash-image-preview",
         "auto",
         "2k",
         "png",
-        "",
         1,
         0.95,
-        0,
+        646184048,
         "randomize",
         32768,
         false,
@@ -553,50 +582,15 @@
       ]
     },
     {
-      "id": 7,
-      "type": "PreviewImage",
-      "pos": [
-        1916.3016137245224,
-        1920.7376557583852
-      ],
-      "size": [
-        239.7388763196309,
-        258
-      ],
-      "flags": {},
-      "order": 5,
-      "mode": 0,
-      "inputs": [
-        {
-          "label": "图像",
-          "name": "images",
-          "type": "IMAGE",
-          "link": 30
-        }
-      ],
-      "outputs": [],
-      "properties": {
-        "cnr_id": "comfy-core",
-        "ver": "0.7.0",
-        "Node name for S&R": "PreviewImage",
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "input_ue_unconnectable": {},
-          "version": "7.5.2"
-        }
-      },
-      "widgets_values": []
-    },
-    {
       "id": 13,
       "type": "APIcaller_KeyPool",
       "pos": [
-        674.4901410319301,
-        2675.2841270894355
+        485.1199708369526,
+        1954.4224096264666
       ],
       "size": [
         400,
-        240
+        240.00000000000009
       ],
       "flags": {},
       "order": 2,
@@ -647,7 +641,7 @@
           "name": "selected_key",
           "type": "STRING",
           "links": [
-            29
+            36
           ]
         },
         {
@@ -661,7 +655,7 @@
       ],
       "properties": {
         "aux_id": "RakuhaSociety/Comfyui_APIcaller",
-        "ver": "6cfc3bf6544cdd283276c0c896ad9375f0b09f88",
+        "ver": "aecee449d44b3af9e9986bf95c1102e1d7477483",
         "Node name for S&R": "APIcaller_KeyPool",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -687,68 +681,68 @@
       "STRING"
     ],
     [
-      27,
-      2,
-      0,
-      22,
-      0,
-      "IMAGE"
-    ],
-    [
-      28,
-      3,
-      0,
-      22,
-      1,
-      "IMAGE"
-    ],
-    [
-      29,
-      13,
-      0,
-      22,
-      11,
-      "STRING"
-    ],
-    [
-      30,
-      22,
-      0,
-      7,
-      0,
-      "IMAGE"
-    ],
-    [
-      31,
-      22,
-      1,
-      19,
-      0,
-      "STRING"
-    ],
-    [
-      32,
-      22,
-      2,
-      20,
-      0,
-      "STRING"
-    ],
-    [
-      33,
-      22,
-      0,
-      21,
-      0,
-      "IMAGE"
-    ],
-    [
       34,
       2,
       0,
       21,
       1,
       "IMAGE"
+    ],
+    [
+      36,
+      13,
+      0,
+      23,
+      0,
+      "STRING"
+    ],
+    [
+      40,
+      2,
+      0,
+      24,
+      1,
+      "IMAGE"
+    ],
+    [
+      41,
+      3,
+      0,
+      24,
+      2,
+      "IMAGE"
+    ],
+    [
+      42,
+      23,
+      0,
+      24,
+      0,
+      "CUSTOM_PROVIDER"
+    ],
+    [
+      43,
+      24,
+      0,
+      7,
+      0,
+      "IMAGE"
+    ],
+    [
+      44,
+      24,
+      0,
+      21,
+      0,
+      "IMAGE"
+    ],
+    [
+      45,
+      24,
+      1,
+      20,
+      0,
+      "STRING"
     ]
   ],
   "groups": [],
@@ -758,10 +752,10 @@
     "ue_links": [],
     "links_added_by_ue": [],
     "ds": {
-      "scale": 0.7247295000000529,
+      "scale": 0.7972024500000575,
       "offset": [
-        -254.4917149813441,
-        -1680.8266496345184
+        -42.964452530087236,
+        -1741.5489047015883
       ]
     },
     "frontendVersion": "1.41.20",

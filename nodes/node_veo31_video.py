@@ -73,10 +73,8 @@ class Veo31VideoNode:
         try:
             # 获取供应商实例（自定义供应商优先）
             if custom_provider and custom_provider.get("api_key") and custom_provider.get("base_url"):
-                from ..providers.provider_lingke import LingkeProvider
-                provider_instance = LingkeProvider()
-                provider_instance.api_key = custom_provider["api_key"]
-                provider_instance.base_url = custom_provider["base_url"]
+                from ..config import create_provider_instance
+                provider_instance = create_provider_instance(custom_provider)
                 print(f"[APIcaller] 使用自定义供应商: {custom_provider['base_url']}")
             else:
                 provider_instance = get_provider(provider)

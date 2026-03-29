@@ -7,7 +7,7 @@ import time
 from typing import Tuple, Optional
 import torch
 
-from ..providers.provider_lingke import LingkeProvider
+from ..config import create_provider_instance
 from ..utils import create_blank_image
 
 
@@ -79,9 +79,7 @@ class NanoBananaEdit:
             if not custom_provider.get("api_key") or not custom_provider.get("base_url"):
                 return (create_blank_image(), "请在 Custom Provider 节点中设置 API Key 和 Base URL", "")
             
-            provider_instance = LingkeProvider()
-            provider_instance.api_key = custom_provider["api_key"]
-            provider_instance.base_url = custom_provider["base_url"]
+            provider_instance = create_provider_instance(custom_provider)
             print(f"[APIcaller] 使用供应商: {custom_provider['base_url']}")
             
             # 收集图像
@@ -307,9 +305,7 @@ class NanoBananaText2Img:
             if not custom_provider.get("api_key") or not custom_provider.get("base_url"):
                 return (create_blank_image(), "请在 Custom Provider 节点中设置 API Key 和 Base URL", "")
             
-            provider_instance = LingkeProvider()
-            provider_instance.api_key = custom_provider["api_key"]
-            provider_instance.base_url = custom_provider["base_url"]
+            provider_instance = create_provider_instance(custom_provider)
             print(f"[APIcaller] 使用供应商: {custom_provider['base_url']}")
             
             # 确定模型
