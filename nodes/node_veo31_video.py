@@ -7,6 +7,7 @@ from typing import Tuple, Optional, List
 import json
 import os
 
+from ..config import create_provider_instance
 from ..providers import get_provider
 from ..providers.provider_lingke import LingkeProvider
 from ..utils import save_video_to_temp, VideoAdapter, EmptyVideoAdapter
@@ -22,22 +23,20 @@ class Veo31VideoNode:
         return {
             "required": {
                 "prompt": ("STRING", {"multiline": True, "default": "make animate"}),
-                "provider": (["lingke", "kie"], {"default": "lingke"}),
+                "custom_provider": ("CUSTOM_PROVIDER",),
                 "model": (LingkeProvider.VEO31_MODELS, {"default": LingkeProvider.VEO31_MODELS[0]}),
                 "aspect_ratio": (["16:9", "9:16", "1:1", "3:2", "2:3"], {"default": "16:9"}),
             },
             "optional": {
-                "image_start": ("IMAGE",),  # 首帧
-                "image_end": ("IMAGE",),    # 尾帧
+                "image_start": ("IMAGE",),
+                "image_end": ("IMAGE",),
                 "enable_upsample": ("BOOLEAN", {"default": True}),
                 "enhance_prompt": ("BOOLEAN", {"default": True}),
                 "watermark": ("BOOLEAN", {"default": False}),
                 "use_kie_upload": ("BOOLEAN", {"default": False}),
                 "kie_api_key": ("STRING", {"default": "", "placeholder": "Kie API Key，用于上传取URL"}),
-                "enable_translation": ("BOOLEAN", {"default": True}),  # 仅 Kie 使用
+                "enable_translation": ("BOOLEAN", {"default": True}),
                 "seeds": ("INT", {"default": 0, "min": 0, "max": 2**31-1}),
-                "api_key": ("STRING", {"default": "", "placeholder": "留空使用已保存的密钥"}),
-                "custom_provider": ("CUSTOM_PROVIDER",),
             }
         }
 
@@ -55,7 +54,7 @@ class Veo31VideoNode:
     def generate_video(
         self,
         prompt: str,
-        provider: str,
+        custom_provider: dict,
         model: str = "veo_3_1-fast",
         aspect_ratio: str = "16:9",
         image_start: Optional[torch.Tensor] = None,
@@ -67,27 +66,22 @@ class Veo31VideoNode:
         kie_api_key: str = "",
         enable_translation: bool = True,
         seeds: int = 0,
-        api_key: str = "",
-        custom_provider: dict = None,
     ):
         try:
-            # 获取供应商实例（自定义供应商优先）
-            if custom_provider and custom_provider.get("api_key") and custom_provider.get("base_url"):
-                from ..config import create_provider_instance
-                provider_instance = create_provider_instance(custom_provider)
-                print(f"[APIcaller] 使用自定义供应商: {custom_provider['base_url']}")
-            else:
-                provider_instance = get_provider(provider)
-
-            if api_key.strip():
-                provider_instance.api_key = api_key.strip()
+            # 使用自定义供应商
+            if not custom_provider.get("api_key") or not custom_provider.get("base_url"):
+                return (EmptyVideoAdapter(), "", json.dumps({"error": "请在 Custom Provider 节点中设置 API Key 和 Base URL"}), "")
+            
+            provider_instance = create_provider_instance(custom_provider)
+            provider_type = custom_provider.get("provider_type", "lingke")
+            print(f"[APIcaller] 使用供应商: {custom_provider['base_url']}")
 
             # 只取首尾帧各一张，避免冗余
             start_img = self._extract_single_image(image_start)
             end_img = self._extract_single_image(image_end)
 
             image_urls = None
-            if provider == "lingke" and use_kie_upload:
+            if provider_type == "lingke" and use_kie_upload:
                 # 使用 Kie 的上传接口获取 URL 再给 Lingke 调用
                 kie_provider = get_provider("kie")
                 if kie_api_key.strip():
@@ -138,7 +132,7 @@ class Veo31VideoNode:
                 except Exception:
                     pass
             else:
-                return (EmptyVideoAdapter(), "", json.dumps({"error": f"Provider {provider} does not support Veo 3.1 video generation"}), "")
+                return (EmptyVideoAdapter(), "", json.dumps({"error": "Provider does not support Veo 3.1 video generation"}), "")
 
             if not video_url:
                 print(f"[APIcaller] Failed to get video URL. Response: {response_json}")

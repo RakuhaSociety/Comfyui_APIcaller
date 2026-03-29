@@ -6,6 +6,7 @@ import torch
 from typing import Tuple, Optional, List
 import json
 
+from ..config import create_provider_instance
 from ..providers import get_provider
 from ..utils import create_blank_image, save_video_to_temp, VideoAdapter, EmptyVideoAdapter
 import os
@@ -21,7 +22,7 @@ class Sora2VideoNode:
         return {
             "required": {
                 "prompt": ("STRING", {"multiline": True, "default": "make animate"}),
-                "provider": (["lingke", "kie"], {"default": "lingke"}),
+                "custom_provider": ("CUSTOM_PROVIDER",),
                 "orientation": (["portrait", "landscape"], {"default": "portrait"}),
             },
             "optional": {
@@ -32,8 +33,6 @@ class Sora2VideoNode:
                 "watermark": ("BOOLEAN", {"default": False}),
                 "use_kie_upload": ("BOOLEAN", {"default": False}),
                 "kie_api_key": ("STRING", {"default": "", "placeholder": "Kie API Key，用于上传取URL"}),
-                "api_key": ("STRING", {"default": "", "placeholder": "留空使用已保存的密钥"}),
-                "custom_provider": ("CUSTOM_PROVIDER",),
             }
         }
     
@@ -45,7 +44,7 @@ class Sora2VideoNode:
     def generate_video(
         self,
         prompt: str,
-        provider: str,
+        custom_provider: dict,
         image: Optional[torch.Tensor] = None,
         model: str = "sora-2-all",
         orientation: str = "portrait",
@@ -54,26 +53,20 @@ class Sora2VideoNode:
         watermark: bool = False,
         use_kie_upload: bool = False,
         kie_api_key: str = "",
-        api_key: str = "",
-        custom_provider: dict = None,
     ):
         
         try:
-            # 获取供应商实例（自定义供应商优先）
-            if custom_provider and custom_provider.get("api_key") and custom_provider.get("base_url"):
-                from ..config import create_provider_instance
-                provider_instance = create_provider_instance(custom_provider)
-                print(f"[APIcaller] 使用自定义供应商: {custom_provider['base_url']}")
-            else:
-                provider_instance = get_provider(provider)
+            # 使用自定义供应商
+            if not custom_provider.get("api_key") or not custom_provider.get("base_url"):
+                return (EmptyVideoAdapter(), "", json.dumps({"error": "请在 Custom Provider 节点中设置 API Key 和 Base URL"}), "")
             
-            # 如果提供了API密钥，临时设置
-            if api_key.strip():
-                provider_instance.api_key = api_key.strip()
+            provider_instance = create_provider_instance(custom_provider)
+            provider_type = custom_provider.get("provider_type", "lingke")
+            print(f"[APIcaller] 使用供应商: {custom_provider['base_url']}")
             
             # 图像URL转换（通过Kie上传）
             image_urls: Optional[List[str]] = None
-            if provider == "lingke" and use_kie_upload and image is not None:
+            if provider_type == "lingke" and use_kie_upload and image is not None:
                 kie_provider = get_provider("kie")
                 if kie_api_key.strip():
                     kie_provider.api_key = kie_api_key.strip()
@@ -118,7 +111,7 @@ class Sora2VideoNode:
                 except:
                     pass
             else:
-                return (EmptyVideoAdapter(), "", json.dumps({"error": f"Provider {provider} does not support Sora 2 video generation"}), "")
+                return (EmptyVideoAdapter(), "", json.dumps({"error": "Provider does not support Sora 2 video generation"}), "")
 
             if not video_url:
                 print(f"[APIcaller] Failed to get video URL. Response: {response_json}")

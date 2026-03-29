@@ -1,8 +1,8 @@
 {
   "id": "d4080a4d-bc24-443c-90d2-1d8942255974",
   "revision": 0,
-  "last_node_id": 25,
-  "last_link_id": 46,
+  "last_node_id": 26,
+  "last_link_id": 47,
   "nodes": [
     {
       "id": 21,
@@ -31,7 +31,7 @@
           "label": "图像_B",
           "name": "image_b",
           "type": "IMAGE",
-          "link": 34
+          "link": null
         }
       ],
       "outputs": [],
@@ -50,12 +50,12 @@
           {
             "name": "A",
             "selected": true,
-            "url": "/api/view?filename=rgthree.compare._temp_trjax_00001_.png&type=temp&subfolder=&rand=0.7029497713407524"
+            "url": "/api/view?filename=rgthree.compare._temp_pcfhf_00003_.png&type=temp&subfolder=&rand=0.7439164370584654"
           },
           {
             "name": "B",
             "selected": true,
-            "url": "/api/view?filename=rgthree.compare._temp_trjax_00002_.png&type=temp&subfolder=&rand=0.3454736806605845"
+            "url": "/api/view?filename=rgthree.compare._temp_pcfhf_00004_.png&type=temp&subfolder=&rand=0.5761361602113739"
           }
         ]
       ]
@@ -96,7 +96,7 @@
       "widgets_values": [
         null,
         null,
-        false
+        null
       ]
     },
     {
@@ -135,7 +135,7 @@
       "widgets_values": [
         null,
         null,
-        false
+        null
       ]
     },
     {
@@ -233,117 +233,28 @@
         "ue_properties": {
           "widget_ue_connectable": {},
           "input_ue_unconnectable": {},
-          "version": "7.5.2"
-        }
-      },
-      "widgets_values": [
-        "",
-        "https://lingkeapi.com",
-        "lingke"
-      ]
-    },
-    {
-      "id": 13,
-      "type": "APIcaller_KeyPool",
-      "pos": [
-        485.1199708369526,
-        1954.4224096264666
-      ],
-      "size": [
-        400,
-        240.00000000000009
-      ],
-      "flags": {},
-      "order": 0,
-      "mode": 0,
-      "inputs": [
-        {
-          "label": "keys",
-          "name": "keys",
-          "type": "STRING",
-          "widget": {
-            "name": "keys"
-          },
-          "link": null
-        },
-        {
-          "label": "lock",
-          "name": "lock",
-          "type": "BOOLEAN",
-          "widget": {
-            "name": "lock"
-          },
-          "link": null
-        },
-        {
-          "label": "note1",
-          "name": "note1",
-          "shape": 7,
-          "type": "STRING",
-          "widget": {
-            "name": "note1"
-          },
-          "link": null
-        },
-        {
-          "label": "note2",
-          "name": "note2",
-          "shape": 7,
-          "type": "STRING",
-          "widget": {
-            "name": "note2"
-          },
-          "link": null
-        }
-      ],
-      "outputs": [
-        {
-          "label": "selected_key",
-          "name": "selected_key",
-          "type": "STRING",
-          "links": [
-            36
-          ]
-        },
-        {
-          "label": "info",
-          "name": "info",
-          "type": "STRING",
-          "links": [
-            21
-          ]
-        }
-      ],
-      "properties": {
-        "aux_id": "RakuhaSociety/Comfyui_APIcaller",
-        "ver": "aecee449d44b3af9e9986bf95c1102e1d7477483",
-        "Node name for S&R": "APIcaller_KeyPool",
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "input_ue_unconnectable": {},
           "version": "7.7"
         }
       },
       "widgets_values": [
         "",
-        false,
-        "",
-        ""
+        "https://api.kie.ai",
+        "lingke"
       ]
     },
     {
-      "id": 2,
+      "id": 25,
       "type": "LoadImage",
       "pos": [
-        953.0134711082923,
-        2076.6471423719945
+        951.0469391065398,
+        2071.663584801134
       ],
       "size": [
         270,
         314
       ],
       "flags": {},
-      "order": 1,
+      "order": 0,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -352,8 +263,7 @@
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
-            34,
-            40
+            46
           ]
         },
         {
@@ -365,16 +275,16 @@
       ],
       "properties": {
         "cnr_id": "comfy-core",
-        "ver": "0.7.0",
+        "ver": "0.17.2",
         "Node name for S&R": "LoadImage",
         "ue_properties": {
           "widget_ue_connectable": {},
           "input_ue_unconnectable": {},
-          "version": "7.5.2"
+          "version": "7.7"
         }
       },
       "widgets_values": [
-        "01.png",
+        "01.jpg",
         "image"
       ]
     },
@@ -404,14 +314,14 @@
           "name": "image1",
           "shape": 7,
           "type": "IMAGE",
-          "link": 40
+          "link": 46
         },
         {
           "label": "image2",
           "name": "image2",
           "shape": 7,
           "type": "IMAGE",
-          "link": 46
+          "link": 47
         },
         {
           "label": "image3",
@@ -579,18 +489,18 @@
         "ue_properties": {
           "widget_ue_connectable": {},
           "input_ue_unconnectable": {},
-          "version": "7.5.2"
+          "version": "7.7"
         }
       },
       "widgets_values": [
         "Edit this image...",
-        "gemini-3.1-flash-image-preview",
+        "nano-banana-2",
         "auto",
         "2k",
         "png",
         1,
         0.95,
-        1236600700,
+        993971499,
         "randomize",
         32768,
         false,
@@ -599,18 +509,18 @@
       ]
     },
     {
-      "id": 25,
+      "id": 26,
       "type": "LoadImage",
       "pos": [
-        955.5046980858317,
-        2446.6736171400785
+        950.3451822373106,
+        2444.9970785533683
       ],
       "size": [
         270,
         314
       ],
       "flags": {},
-      "order": 2,
+      "order": 1,
       "mode": 4,
       "inputs": [],
       "outputs": [
@@ -619,7 +529,7 @@
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
-            46
+            47
           ]
         },
         {
@@ -631,17 +541,106 @@
       ],
       "properties": {
         "cnr_id": "comfy-core",
-        "ver": "0.7.0",
+        "ver": "0.17.2",
+        "Node name for S&R": "LoadImage",
         "ue_properties": {
           "widget_ue_connectable": {},
           "input_ue_unconnectable": {},
-          "version": "7.5.2"
-        },
-        "Node name for S&R": "LoadImage"
+          "version": "7.7"
+        }
       },
       "widgets_values": [
-        "01.png",
+        "01.jpg",
         "image"
+      ]
+    },
+    {
+      "id": 13,
+      "type": "APIcaller_KeyPool",
+      "pos": [
+        485.1199708369526,
+        1954.4224096264666
+      ],
+      "size": [
+        400,
+        240.00000000000009
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "label": "keys",
+          "name": "keys",
+          "type": "STRING",
+          "widget": {
+            "name": "keys"
+          },
+          "link": null
+        },
+        {
+          "label": "lock",
+          "name": "lock",
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "lock"
+          },
+          "link": null
+        },
+        {
+          "label": "note1",
+          "name": "note1",
+          "shape": 7,
+          "type": "STRING",
+          "widget": {
+            "name": "note1"
+          },
+          "link": null
+        },
+        {
+          "label": "note2",
+          "name": "note2",
+          "shape": 7,
+          "type": "STRING",
+          "widget": {
+            "name": "note2"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "label": "selected_key",
+          "name": "selected_key",
+          "type": "STRING",
+          "links": [
+            36
+          ]
+        },
+        {
+          "label": "info",
+          "name": "info",
+          "type": "STRING",
+          "links": [
+            21
+          ]
+        }
+      ],
+      "properties": {
+        "aux_id": "RakuhaSociety/Comfyui_APIcaller",
+        "ver": "aecee449d44b3af9e9986bf95c1102e1d7477483",
+        "Node name for S&R": "APIcaller_KeyPool",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.7"
+        }
+      },
+      "widgets_values": [
+        "",
+        false,
+        "",
+        ""
       ]
     }
   ],
@@ -655,28 +654,12 @@
       "STRING"
     ],
     [
-      34,
-      2,
-      0,
-      21,
-      1,
-      "IMAGE"
-    ],
-    [
       36,
       13,
       0,
       23,
       0,
       "STRING"
-    ],
-    [
-      40,
-      2,
-      0,
-      24,
-      1,
-      "IMAGE"
     ],
     [
       42,
@@ -715,6 +698,14 @@
       25,
       0,
       24,
+      1,
+      "IMAGE"
+    ],
+    [
+      47,
+      26,
+      0,
+      24,
       2,
       "IMAGE"
     ]
@@ -726,10 +717,10 @@
     "ue_links": [],
     "links_added_by_ue": [],
     "ds": {
-      "scale": 0.7972024500000575,
+      "scale": 0.8769226950000649,
       "offset": [
-        -157.11362505206512,
-        -1737.7857451678958
+        -241.74838457437113,
+        -1768.3301193581196
       ]
     },
     "frontendVersion": "1.41.20",

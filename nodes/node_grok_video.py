@@ -6,10 +6,10 @@ import torch
 from typing import Tuple, Optional, List
 import json
 
+from ..config import create_provider_instance
 from ..providers import get_provider
 from ..utils import create_blank_image, save_video_to_temp, VideoAdapter, EmptyVideoAdapter
 import os
-import json
 
 
 class GrokVideoNode:
@@ -22,7 +22,7 @@ class GrokVideoNode:
         return {
             "required": {
                 "prompt": ("STRING", {"multiline": True, "default": "A cat eating fish"}),
-                "provider": (["lingke", "kie"], {"default": "lingke"}),
+                "custom_provider": ("CUSTOM_PROVIDER",),
             },
             "optional": {
                 "image1": ("IMAGE",),
@@ -36,8 +36,6 @@ class GrokVideoNode:
                 "duration": ("INT", {"default": 5, "min": 3, "max": 15}),
                 "use_kie_upload": ("BOOLEAN", {"default": False}),
                 "kie_api_key": ("STRING", {"default": "", "placeholder": "Kie API Key，用于上传取URL"}),
-                "api_key": ("STRING", {"default": "", "placeholder": "留空使用已保存的密钥"}),
-                "custom_provider": ("CUSTOM_PROVIDER",),
             }
         }
     
@@ -49,7 +47,7 @@ class GrokVideoNode:
     def generate_video(
         self,
         prompt: str,
-        provider: str,
+        custom_provider: dict,
         image1: Optional[torch.Tensor] = None,
         image2: Optional[torch.Tensor] = None,
         image3: Optional[torch.Tensor] = None,
@@ -61,33 +59,27 @@ class GrokVideoNode:
         duration: int = 5,
         use_kie_upload: bool = False,
         kie_api_key: str = "",
-        api_key: str = "",
-        custom_provider: dict = None,
     ):
         
         try:
             # 收集所有非空图像
             all_images = [img for img in [image1, image2, image3, image4, image5] if img is not None]
 
-            # 获取供应商实例（自定义供应商优先）
-            if custom_provider and custom_provider.get("api_key") and custom_provider.get("base_url"):
-                from ..config import create_provider_instance
-                provider_instance = create_provider_instance(custom_provider)
-                print(f"[APIcaller] 使用自定义供应商: {custom_provider['base_url']}")
-            else:
-                provider_instance = get_provider(provider)
+            # 使用自定义供应商
+            if not custom_provider.get("api_key") or not custom_provider.get("base_url"):
+                return (EmptyVideoAdapter(), "", json.dumps({"error": "请在 Custom Provider 节点中设置 API Key 和 Base URL"}), "")
             
-            # 如果提供了API密钥，临时设置
-            if api_key.strip():
-                provider_instance.api_key = api_key.strip()
+            provider_instance = create_provider_instance(custom_provider)
+            provider_type = custom_provider.get("provider_type", "lingke")
+            print(f"[APIcaller] 使用供应商: {custom_provider['base_url']}")
             
             # 兼容Kie模型名称
-            if provider == "kie" and model == "grok-video-3-10s":
+            if provider_type == "kie" and model == "grok-video-3-10s":
                 model = "grok-imagine/image-to-video"
                 
             # 图像URL转换（通过Kie上传）
             image_urls: Optional[List[str]] = None
-            if provider == "lingke" and use_kie_upload and all_images:
+            if provider_type == "lingke" and use_kie_upload and all_images:
                 kie_provider = get_provider("kie")
                 if kie_api_key.strip():
                     kie_provider.api_key = kie_api_key.strip()
@@ -136,7 +128,7 @@ class GrokVideoNode:
                 except:
                     pass
             else:
-                return (EmptyVideoAdapter(), "", json.dumps({"error": f"Provider {provider} does not support video generation"}), "")
+                return (EmptyVideoAdapter(), "", json.dumps({"error": "Provider does not support video generation"}), "")
 
             if not video_url:
                 print(f"[APIcaller] Failed to get video URL. Response: {response_json}")
