@@ -1109,6 +1109,258 @@ class LingkeProvider(BaseProvider):
             print(f"[Lingke] Hailuo {error_msg}")
             return "", error_msg
 
+    # ==================== GPT Image ====================
+
+    def gpt_image_t2i(
+        self,
+        prompt: str,
+        model: str = "gpt-image-1.5",
+        size: str = "1024x1024",
+        aspect_ratio: Optional[str] = None,
+        quality: str = "medium",
+        n: int = 1,
+        **kwargs,
+    ) -> Tuple[Optional[torch.Tensor], str, str]:
+        """
+        GPT Image 文生图 (Lingke)
+        API端点: POST /v1/images/generations
+        模型: gpt-image-1.5
+        """
+        pbar = kwargs.get("pbar")
+
+        if not self.api_key:
+            return create_blank_image(), "API密钥未设置", ""
+
+        try:
+            if pbar:
+                pbar.update_absolute(10)
+
+            if size == "auto":
+                size = "1024x1024"
+
+            payload: Dict[str, Any] = {
+                "model": model,
+                "prompt": prompt,
+                "size": size,
+                "n": n,
+            }
+            if quality and quality != "auto":
+                payload["quality"] = quality
+
+            url = f"{self.base_url}/v1/images/generations"
+            headers = {
+                "Accept": "application/json",
+                "Authorization": f"Bearer {self.api_key}",
+                "Content-Type": "application/json",
+            }
+
+            print(f"[Lingke] GPT Image T2I 请求URL: {url}")
+            print(f"[Lingke] GPT Image T2I 使用模型: {model}, size={size}")
+
+            response = requests.post(url, headers=headers, json=payload, timeout=self.timeout)
+
+            if response.status_code != 200:
+                error_msg = f"API错误: {response.status_code} - {response.text}"
+                print(f"[Lingke] GPT Image T2I {error_msg}")
+                return create_blank_image(), error_msg, ""
+
+            result = response.json()
+            print(f"[Lingke] GPT Image T2I 响应: {json.dumps(result, ensure_ascii=False)[:500]}")
+
+            if pbar:
+                pbar.update_absolute(70)
+
+            # 提取图片 — 支持 OpenAI 标准格式和 Lingke 特殊格式
+            image_url, b64_data = self._extract_image_from_response(result)
+
+            if b64_data:
+                pil_image = base64_to_pil(b64_data)
+                if pil_image:
+                    image_tensor = pil2tensor(pil_image)
+                    if pbar:
+                        pbar.update_absolute(100)
+                    response_info = {
+                        "provider": self.display_name,
+                        "model": model,
+                        "size": size,
+                    }
+                    return image_tensor, json.dumps(response_info, ensure_ascii=False, indent=2), "base64"
+
+            if image_url:
+                image_data, download_error = download_image(image_url, self.timeout)
+                if download_error:
+                    return create_blank_image(), f"下载图像失败: {download_error}", image_url
+                pil_image = Image.open(BytesIO(image_data))
+                image_tensor = pil2tensor(pil_image)
+                if pbar:
+                    pbar.update_absolute(100)
+                response_info = {
+                    "provider": self.display_name,
+                    "model": model,
+                    "size": size,
+                    "image_url": image_url,
+                }
+                return image_tensor, json.dumps(response_info, ensure_ascii=False, indent=2), image_url
+
+            return create_blank_image(), f"未生成图像。响应: {json.dumps(result, ensure_ascii=False)[:500]}", ""
+
+        except Exception as e:
+            error_msg = f"处理错误: {str(e)}"
+            print(f"[Lingke] GPT Image T2I {error_msg}")
+            return create_blank_image(), error_msg, ""
+
+    def gpt_image_i2i(
+        self,
+        prompt: str,
+        images: Optional[List[torch.Tensor]] = None,
+        mask: Optional[torch.Tensor] = None,
+        model: str = "gpt-image-1.5",
+        size: str = "1024x1024",
+        aspect_ratio: Optional[str] = None,
+        quality: str = "medium",
+        n: int = 1,
+        image_urls: Optional[List[str]] = None,
+        **kwargs,
+    ) -> Tuple[Optional[torch.Tensor], str, str]:
+        """
+        GPT Image 图生图 (Lingke)
+        API端点: POST /v1/images/edits
+        模型: gpt-image-1.5
+        使用 multipart/form-data 上传图像 + 可选蒙版
+        """
+        pbar = kwargs.get("pbar")
+
+        if not self.api_key:
+            return create_blank_image(), "API密钥未设置", ""
+
+        try:
+            if pbar:
+                pbar.update_absolute(10)
+
+            if size == "auto":
+                size = "1024x1024"
+
+            url = f"{self.base_url}/v1/images/edits"
+            headers = {
+                "Accept": "application/json",
+                "Authorization": f"Bearer {self.api_key}",
+            }
+
+            # 构建 multipart files
+            files = []
+            # 添加图像（tensor → PNG bytes）
+            if images:
+                for idx, img in enumerate(images):
+                    pil_images = tensor2pil(img[0:1])
+                    buf = BytesIO()
+                    pil_images[0].save(buf, format="PNG")
+                    buf.seek(0)
+                    files.append(("image", (f"image_{idx}.png", buf, "image/png")))
+
+            # 添加蒙版
+            if mask is not None:
+                pil_masks = tensor2pil(mask[0:1])
+                mask_buf = BytesIO()
+                pil_masks[0].save(mask_buf, format="PNG")
+                mask_buf.seek(0)
+                files.append(("mask", ("mask.png", mask_buf, "image/png")))
+
+            # 其他字段用 data
+            form_data = {
+                "prompt": prompt,
+                "model": model,
+                "n": str(n),
+                "size": size,
+            }
+            if quality and quality != "auto":
+                form_data["quality"] = quality
+
+            print(f"[Lingke] GPT Image I2I 请求URL: {url}")
+            print(f"[Lingke] GPT Image I2I 使用模型: {model}, size={size}, images={len(files)}")
+
+            response = requests.post(
+                url, headers=headers, data=form_data, files=files, timeout=self.timeout
+            )
+
+            if response.status_code != 200:
+                error_msg = f"API错误: {response.status_code} - {response.text}"
+                print(f"[Lingke] GPT Image I2I {error_msg}")
+                return create_blank_image(), error_msg, ""
+
+            result = response.json()
+            print(f"[Lingke] GPT Image I2I 响应: {json.dumps(result, ensure_ascii=False)[:500]}")
+
+            if pbar:
+                pbar.update_absolute(70)
+
+            image_url, b64_data = self._extract_image_from_response(result)
+
+            if b64_data:
+                pil_image = base64_to_pil(b64_data)
+                if pil_image:
+                    image_tensor = pil2tensor(pil_image)
+                    if pbar:
+                        pbar.update_absolute(100)
+                    response_info = {
+                        "provider": self.display_name,
+                        "model": model,
+                        "size": size,
+                    }
+                    return image_tensor, json.dumps(response_info, ensure_ascii=False, indent=2), "base64"
+
+            if image_url:
+                image_data, download_error = download_image(image_url, self.timeout)
+                if download_error:
+                    return create_blank_image(), f"下载图像失败: {download_error}", image_url
+                pil_image = Image.open(BytesIO(image_data))
+                image_tensor = pil2tensor(pil_image)
+                if pbar:
+                    pbar.update_absolute(100)
+                response_info = {
+                    "provider": self.display_name,
+                    "model": model,
+                    "size": size,
+                    "image_url": image_url,
+                }
+                return image_tensor, json.dumps(response_info, ensure_ascii=False, indent=2), image_url
+
+            return create_blank_image(), f"未生成图像。响应: {json.dumps(result, ensure_ascii=False)[:500]}", ""
+
+        except Exception as e:
+            error_msg = f"处理错误: {str(e)}"
+            print(f"[Lingke] GPT Image I2I {error_msg}")
+            return create_blank_image(), error_msg, ""
+
+    def _extract_image_from_response(self, result: Dict) -> Tuple[Optional[str], Optional[str]]:
+        """
+        从 Lingke GPT Image 响应中提取图像URL或base64。
+        支持 OpenAI 标准 (data[].url / data[].b64_json) 和
+        choices[].message.content 格式。
+        Returns: (image_url, b64_data) — 优先 url
+        """
+        # OpenAI 标准: {"data": [{"url": "..."} or {"b64_json": "..."}]}
+        data_list = result.get("data")
+        if isinstance(data_list, list) and data_list:
+            first = data_list[0]
+            if isinstance(first, dict):
+                if first.get("url"):
+                    return first["url"], None
+                if first.get("b64_json"):
+                    return None, first["b64_json"]
+
+        # Lingke choices 格式
+        choices = result.get("choices", [])
+        if choices:
+            msg = choices[0].get("message", {})
+            content = msg.get("content", "")
+            if isinstance(content, str) and content.startswith("http"):
+                return content, None
+            # content 可能是 base64
+            if isinstance(content, str) and len(content) > 200:
+                return None, content
+
+        return None, None
+
     def get_available_models(self) -> List[str]:
         return [
             "gemini-3-pro-image-preview",
@@ -1120,6 +1372,7 @@ class LingkeProvider(BaseProvider):
             *self.VEO31_MODELS,
             "MiniMax-Hailuo-2.3-Fast",
             "MiniMax-Hailuo-2.3",
+            "gpt-image-1.5",
         ]
     
     def get_available_resolutions(self) -> List[str]:

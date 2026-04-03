@@ -1293,6 +1293,277 @@ class KieProvider(BaseProvider):
             print(f"[Kie] Hailuo {error_msg}")
             return "", error_msg
 
+    # ==================== GPT Image ====================
+
+    def gpt_image_t2i(
+        self,
+        prompt: str,
+        model: str = "gpt-image/1.5-text-to-image",
+        size: str = "1024x1024",
+        aspect_ratio: Optional[str] = None,
+        quality: str = "medium",
+        n: int = 1,
+        **kwargs,
+    ) -> Tuple[Optional[torch.Tensor], str, str]:
+        """
+        GPT Image 文生图 (Kie)
+        API端点: POST /api/v1/jobs/createTask
+        模型: gpt-image/1.5-text-to-image
+        """
+        pbar = kwargs.get("pbar")
+
+        if not self.api_key:
+            return create_blank_image(), "API密钥未设置", ""
+
+        try:
+            if pbar:
+                pbar.update_absolute(5)
+
+            # Kie 使用 aspect_ratio；如果没有，从 size 推导
+            if not aspect_ratio:
+                size_map = {
+                    "1024x1024": "1:1",
+                    "1024x1536": "2:3",
+                    "1536x1024": "3:2",
+                }
+                aspect_ratio = size_map.get(size, "1:1")
+
+            input_data: Dict[str, Any] = {
+                "prompt": prompt,
+                "aspect_ratio": aspect_ratio,
+                "quality": quality,
+            }
+
+            payload = {
+                "model": model,
+                "input": input_data,
+            }
+
+            url = f"{self.base_url}/api/v1/jobs/createTask"
+            print(f"[Kie] GPT Image T2I 请求URL: {url}")
+            print(f"[Kie] GPT Image T2I 使用模型: {model}")
+
+            response = self._make_request("POST", url, json=payload)
+
+            if response.status_code != 200:
+                error_msg = f"API错误: {response.status_code} - {response.text}"
+                print(f"[Kie] GPT Image T2I {error_msg}")
+                return create_blank_image(), error_msg, ""
+
+            result = response.json()
+            print(f"[Kie] GPT Image T2I 创建任务响应: {json.dumps(result, ensure_ascii=False)[:500]}")
+
+            data = result.get("data") if result else None
+            task_id = (
+                result.get("taskId")
+                or result.get("task_id")
+                or result.get("id")
+                or (data.get("taskId") if isinstance(data, dict) else None)
+                or (data.get("task_id") if isinstance(data, dict) else None)
+                or (data.get("id") if isinstance(data, dict) else None)
+            )
+
+            if not task_id:
+                return create_blank_image(), f"未获取到任务ID。响应: {json.dumps(result, ensure_ascii=False)}", ""
+
+            print(f"[Kie] GPT Image T2I 任务ID: {task_id}")
+
+            if pbar:
+                pbar.update_absolute(30)
+
+            task_result, error = self._poll_for_result(task_id, pbar)
+            if error:
+                return create_blank_image(), error, ""
+            if not task_result:
+                return create_blank_image(), "未获取到结果", ""
+
+            image_url = self._extract_image_url(task_result)
+            if not image_url:
+                return create_blank_image(), f"未生成图像。响应: {json.dumps(task_result, ensure_ascii=False)[:500]}", ""
+
+            image_data, download_error = download_image(image_url, self.timeout)
+            if download_error:
+                return create_blank_image(), f"下载图像失败: {download_error}", image_url
+
+            pil_image = Image.open(BytesIO(image_data))
+            image_tensor = pil2tensor(pil_image)
+
+            if pbar:
+                pbar.update_absolute(100)
+
+            response_info = {
+                "provider": self.display_name,
+                "model": model,
+                "task_id": task_id,
+                "quality": quality,
+                "image_url": image_url,
+            }
+            return image_tensor, json.dumps(response_info, ensure_ascii=False, indent=2), image_url
+
+        except Exception as e:
+            error_msg = f"处理错误: {str(e)}"
+            print(f"[Kie] GPT Image T2I {error_msg}")
+            return create_blank_image(), error_msg, ""
+
+    def gpt_image_i2i(
+        self,
+        prompt: str,
+        images: Optional[List[torch.Tensor]] = None,
+        mask: Optional[torch.Tensor] = None,
+        model: str = "gpt-image/1.5-image-to-image",
+        size: str = "1024x1024",
+        aspect_ratio: Optional[str] = None,
+        quality: str = "medium",
+        n: int = 1,
+        image_urls: Optional[List[str]] = None,
+        **kwargs,
+    ) -> Tuple[Optional[torch.Tensor], str, str]:
+        """
+        GPT Image 图生图 (Kie)
+        API端点: POST /api/v1/jobs/createTask
+        模型: gpt-image/1.5-image-to-image
+        """
+        pbar = kwargs.get("pbar")
+
+        if not self.api_key:
+            return create_blank_image(), "API密钥未设置", ""
+
+        try:
+            if pbar:
+                pbar.update_absolute(5)
+
+            # 上传图像获取 URL（如果节点层没有预上传）
+            if image_urls:
+                input_urls = image_urls
+                print(f"[Kie] GPT Image I2I 使用节点层预上传的 {len(input_urls)} 张图像URL")
+            elif images:
+                input_urls = []
+                img_index = 0
+                for img in images:
+                    single = img[0:1]
+                    img_url, upload_error = self._upload_image(single, img_index)
+                    if upload_error:
+                        return create_blank_image(), f"上传图像失败: {upload_error}", ""
+                    if img_url:
+                        input_urls.append(img_url)
+                    img_index += 1
+            else:
+                return create_blank_image(), "需要输入图像", ""
+
+            if not input_urls:
+                return create_blank_image(), "未获取到上传后的图像URL", ""
+
+            if pbar:
+                pbar.update_absolute(20)
+
+            if not aspect_ratio:
+                size_map = {
+                    "1024x1024": "1:1",
+                    "1024x1536": "2:3",
+                    "1536x1024": "3:2",
+                }
+                aspect_ratio = size_map.get(size, "1:1")
+
+            input_data: Dict[str, Any] = {
+                "input_urls": input_urls,
+                "prompt": prompt,
+                "aspect_ratio": aspect_ratio,
+                "quality": quality,
+            }
+
+            payload = {
+                "model": model,
+                "input": input_data,
+            }
+
+            url = f"{self.base_url}/api/v1/jobs/createTask"
+            print(f"[Kie] GPT Image I2I 请求URL: {url}")
+            print(f"[Kie] GPT Image I2I 使用模型: {model}")
+
+            response = self._make_request("POST", url, json=payload)
+
+            if response.status_code != 200:
+                error_msg = f"API错误: {response.status_code} - {response.text}"
+                print(f"[Kie] GPT Image I2I {error_msg}")
+                return create_blank_image(), error_msg, ""
+
+            result = response.json()
+            print(f"[Kie] GPT Image I2I 创建任务响应: {json.dumps(result, ensure_ascii=False)[:500]}")
+
+            data = result.get("data") if result else None
+            task_id = (
+                result.get("taskId")
+                or result.get("task_id")
+                or result.get("id")
+                or (data.get("taskId") if isinstance(data, dict) else None)
+                or (data.get("task_id") if isinstance(data, dict) else None)
+                or (data.get("id") if isinstance(data, dict) else None)
+            )
+
+            if not task_id:
+                return create_blank_image(), f"未获取到任务ID。响应: {json.dumps(result, ensure_ascii=False)}", ""
+
+            print(f"[Kie] GPT Image I2I 任务ID: {task_id}")
+
+            if pbar:
+                pbar.update_absolute(30)
+
+            task_result, error = self._poll_for_result(task_id, pbar)
+            if error:
+                return create_blank_image(), error, ""
+            if not task_result:
+                return create_blank_image(), "未获取到结果", ""
+
+            image_url = self._extract_image_url(task_result)
+            if not image_url:
+                return create_blank_image(), f"未生成图像。响应: {json.dumps(task_result, ensure_ascii=False)[:500]}", ""
+
+            image_data, download_error = download_image(image_url, self.timeout)
+            if download_error:
+                return create_blank_image(), f"下载图像失败: {download_error}", image_url
+
+            pil_image = Image.open(BytesIO(image_data))
+            image_tensor = pil2tensor(pil_image)
+
+            if pbar:
+                pbar.update_absolute(100)
+
+            response_info = {
+                "provider": self.display_name,
+                "model": model,
+                "task_id": task_id,
+                "quality": quality,
+                "image_url": image_url,
+            }
+            return image_tensor, json.dumps(response_info, ensure_ascii=False, indent=2), image_url
+
+        except Exception as e:
+            error_msg = f"处理错误: {str(e)}"
+            print(f"[Kie] GPT Image I2I {error_msg}")
+            return create_blank_image(), error_msg, ""
+
+    def _extract_image_url(self, task_result: Dict) -> Optional[str]:
+        """从轮询结果中提取图像URL"""
+        target_keys = ["resultUrls", "result_urls", "output", "outputs", "images", "url", "result"]
+        for key in target_keys:
+            val = task_result.get(key)
+            if val:
+                if isinstance(val, list) and val:
+                    return val[0] if isinstance(val[0], str) else None
+                elif isinstance(val, str) and val.startswith("http"):
+                    return val
+
+        output_node = task_result.get("output")
+        if isinstance(output_node, dict):
+            for key in ["image_urls", "images", "url"]:
+                val = output_node.get(key)
+                if val:
+                    if isinstance(val, list) and val:
+                        return val[0] if isinstance(val[0], str) else None
+                    elif isinstance(val, str) and val.startswith("http"):
+                        return val
+        return None
+
     def get_available_models(self) -> List[str]:
         return [
             "nano-banana-pro",
@@ -1306,6 +1577,8 @@ class KieProvider(BaseProvider):
             "hailuo/2-3-image-to-video-pro",
             "hailuo/02-image-to-video-standard",
             "hailuo/02-image-to-video-pro",
+            "gpt-image/1.5-text-to-image",
+            "gpt-image/1.5-image-to-image",
         ]
     
     def get_available_resolutions(self) -> List[str]:

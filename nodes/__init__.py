@@ -8,6 +8,7 @@ from .node_veo31_video import Veo31VideoNode
 from .node_hailuo_video import HailuoVideoNode
 from .node_key_pool import APIKeyPoolNode
 from .node_openai_llm import OpenAILLM
+from .node_gpt_image import GPTImageText2Img, GPTImageImg2Img
 
 # __all__ = [
 #     'NanoBananaEdit',
