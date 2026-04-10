@@ -109,13 +109,17 @@ class KieProvider(BaseProvider):
             if pbar:
                 pbar.update_absolute(20)
 
+            mode = kwargs.get('mode', 'normal')
+            resolution = kwargs.get('resolution', '720p')
+
             payload = {
                 "model": model,
                 "input": {
                     "image_urls": image_urls,
                     "prompt": prompt,
-                    "mode": "normal",
+                    "mode": mode,
                     "duration": str(duration),
+                    "resolution": resolution,
                     "aspect_ratio": aspect_ratio
                 }
             }

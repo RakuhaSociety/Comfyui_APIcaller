@@ -425,7 +425,7 @@ class LingkeProvider(BaseProvider):
                 "2:3": "800x1200",
                 "1:1": "1024x1024",
             }
-            size = kwargs.get("size") or size_map.get(aspect_ratio, "1200x800")
+            size = kwargs.get("resolution") or kwargs.get("size") or size_map.get(aspect_ratio, "1200x800")
 
             images_payload: List[str] = []
             image_urls: List[str] = kwargs.get("image_urls") or []
@@ -1171,7 +1171,7 @@ class LingkeProvider(BaseProvider):
                 pbar.update_absolute(70)
 
             # 提取图片 — 支持 OpenAI 标准格式和 Lingke 特殊格式
-            image_url, b64_data = self._extract_image_from_response(result)
+            image_url, b64_data = self._extract_gpt_image_from_response(result)
 
             if b64_data:
                 pil_image = base64_to_pil(b64_data)
@@ -1293,7 +1293,7 @@ class LingkeProvider(BaseProvider):
             if pbar:
                 pbar.update_absolute(70)
 
-            image_url, b64_data = self._extract_image_from_response(result)
+            image_url, b64_data = self._extract_gpt_image_from_response(result)
 
             if b64_data:
                 pil_image = base64_to_pil(b64_data)
@@ -1331,7 +1331,7 @@ class LingkeProvider(BaseProvider):
             print(f"[Lingke] GPT Image I2I {error_msg}")
             return create_blank_image(), error_msg, ""
 
-    def _extract_image_from_response(self, result: Dict) -> Tuple[Optional[str], Optional[str]]:
+    def _extract_gpt_image_from_response(self, result: Dict) -> Tuple[Optional[str], Optional[str]]:
         """
         从 Lingke GPT Image 响应中提取图像URL或base64。
         支持 OpenAI 标准 (data[].url / data[].b64_json) 和

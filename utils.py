@@ -27,12 +27,19 @@ import shutil
 import requests
 from typing import List, Union, Tuple, Optional, Dict
 
+try:
+    from comfy_api.latest._input_impl.video_types import VideoFromFile as _VideoFromFile
+except ImportError:
+    _VideoFromFile = None
+
+
 class VideoAdapter:
     """
-    Video Adapter similar to ComflyVideoAdapter
-    Allows ComfyUI to handle video preview and saving via save_to method.
+    Video Adapter that wraps ComfyUI's native VideoFromFile when a local file
+    is available, so that downstream nodes like GetVideoComponents work.
     """
     def __init__(self, video_path_or_url):
+        self._native = None
         if video_path_or_url is None:
              self.is_url = False
              self.video_path = None
@@ -47,12 +54,69 @@ class VideoAdapter:
             self.is_url = False
             self.video_path = video_path_or_url
             self.video_url = None
-        
+            if _VideoFromFile is not None and os.path.isfile(video_path_or_url):
+                self._native = _VideoFromFile(video_path_or_url)
+
+    def _ensure_local(self):
+        """Download the video to a temp file if we only have a URL."""
+        if self._native is not None:
+            return self._native
+        if self.is_url and self.video_url:
+            try:
+                resp = requests.get(self.video_url, stream=True, timeout=120)
+                resp.raise_for_status()
+                ext = ".mp4"
+                tmp_path = os.path.join(
+                    folder_paths.get_temp_directory(),
+                    f"apicaller_dl_{uuid.uuid4().hex[:8]}{ext}",
+                )
+                with open(tmp_path, "wb") as f:
+                    for chunk in resp.iter_content(chunk_size=8192):
+                        f.write(chunk)
+                self.video_path = tmp_path
+                self.is_url = False
+                if _VideoFromFile is not None:
+                    self._native = _VideoFromFile(tmp_path)
+                return self._native
+            except Exception as e:
+                print(f"[APIcaller] Error downloading video for components: {e}")
+                return None
+        return None
+
+    # ---------- ComfyUI native interface ----------
+    def get_components(self):
+        native = self._ensure_local()
+        if native is not None:
+            return native.get_components()
+        raise AttributeError("Cannot get_components: no local video file available")
+
     def get_dimensions(self):
-        # Default fallback dimensions if we can't probe
+        if self._native is not None:
+            return self._native.get_dimensions()
         return 1280, 720
-            
+
+    def get_duration(self):
+        native = self._ensure_local()
+        if native is not None:
+            return native.get_duration()
+        return 0.0
+
+    def get_stream_source(self):
+        native = self._ensure_local()
+        if native is not None:
+            return native.get_stream_source()
+        if self.video_path:
+            return self.video_path
+        raise AttributeError("Cannot get_stream_source: no local video file available")
+
+    # ---------- Legacy interface ----------
     def save_to(self, output_path, format="auto", codec="auto", metadata=None):
+        if self._native is not None:
+            try:
+                self._native.save_to(output_path, format=format, codec=codec, metadata=metadata)
+                return True
+            except Exception:
+                pass
         if hasattr(self, 'video_url') and self.is_url:
             try:
                 response = requests.get(self.video_url, stream=True)

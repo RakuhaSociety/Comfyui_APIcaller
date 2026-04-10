@@ -30,10 +30,13 @@ class GrokVideoNode:
                 "image3": ("IMAGE",),
                 "image4": ("IMAGE",),
                 "image5": ("IMAGE",),
+                "image6": ("IMAGE",),
+                "image7": ("IMAGE",),
                 "model": ("STRING", {"default": "grok-video-3-10s", "multiline": False}),
                 "aspect_ratio": (["16:9", "9:16", "3:2", "2:3", "1:1"], {"default": "3:2"}),
-                "size": (["720p", "1080p"], {"default": "720p"}),
-                "duration": ("INT", {"default": 5, "min": 3, "max": 15}),
+                "resolution": (["480p", "720p", "1080p"], {"default": "720p"}),
+                "duration": ("INT", {"default": 6, "min": 6, "max": 30}),
+                "mode": (["normal", "fun", "spicy"], {"default": "normal"}),
                 "use_kie_upload": ("BOOLEAN", {"default": False}),
                 "kie_api_key": ("STRING", {"default": "", "placeholder": "Kie API Key，用于上传取URL"}),
             }
@@ -53,17 +56,20 @@ class GrokVideoNode:
         image3: Optional[torch.Tensor] = None,
         image4: Optional[torch.Tensor] = None,
         image5: Optional[torch.Tensor] = None,
+        image6: Optional[torch.Tensor] = None,
+        image7: Optional[torch.Tensor] = None,
         model: str = "grok-video-3-10s",
         aspect_ratio: str = "3:2",
-        size: str = "720p",
-        duration: int = 5,
+        resolution: str = "720p",
+        duration: int = 6,
+        mode: str = "normal",
         use_kie_upload: bool = False,
         kie_api_key: str = "",
     ):
         
         try:
-            # 收集所有非空图像
-            all_images = [img for img in [image1, image2, image3, image4, image5] if img is not None]
+            # 收集所有非空图像（最多7张）
+            all_images = [img for img in [image1, image2, image3, image4, image5, image6, image7] if img is not None]
 
             # 使用自定义供应商
             if not custom_provider.get("api_key") or not custom_provider.get("base_url"):
@@ -132,7 +138,8 @@ class GrokVideoNode:
                     aspect_ratio=aspect_ratio,
                     duration=duration,
                     image_urls=image_urls,
-                    size=size,
+                    resolution=resolution,
+                    mode=mode,
                 )
                 # Try to extract task_id from response for parity
                 try:
