@@ -1378,3 +1378,130 @@ class LingkeProvider(BaseProvider):
     def get_available_resolutions(self) -> List[str]:
         # Lingke使用Gemini格式，分辨率由模型决定
         return ["auto"]
+
+    # ==================== Midjourney ====================
+
+    def _mj_poll(self, task_id: str, pbar=None) -> Tuple[Optional[Dict], Optional[str]]:
+        """轮询 MJ 任务状态: GET /mj/task/{id}/fetch"""
+        attempts = 0
+        session = self._get_session()
+        while attempts < self.max_poll_attempts:
+            time.sleep(self.poll_interval)
+            attempts += 1
+            try:
+                url = f"{self.base_url}/mj/task/{task_id}/fetch"
+                response = session.get(
+                    url,
+                    headers=self.get_headers(include_content_type=False),
+                    timeout=self.timeout,
+                )
+                if response.status_code != 200:
+                    print(f"[Lingke MJ] 轮询状态码: {response.status_code}")
+                    continue
+
+                data = response.json() or {}
+                status = str(data.get("status", "")).upper()
+                progress = data.get("progress", "")
+                print(f"[Lingke MJ] 轮询 {attempts}: status={status} progress={progress}")
+
+                if pbar:
+                    pct = 30
+                    try:
+                        if isinstance(progress, str) and progress.endswith("%"):
+                            pct = max(30, min(95, 30 + int(progress.rstrip("%")) * 60 // 100))
+                    except Exception:
+                        pass
+                    pbar.update_absolute(pct)
+
+                if status in ("SUCCESS",):
+                    return data, None
+                if status in ("FAILURE", "FAILED", "CANCEL", "CANCELLED"):
+                    return None, f"任务失败: {data.get('failReason') or data.get('description') or 'Unknown'}"
+            except Exception as e:
+                print(f"[Lingke MJ] 轮询错误: {str(e)}")
+
+        return None, "任务超时"
+
+    def mj_imagine(
+        self,
+        prompt: str,
+        base64_array: Optional[List[str]] = None,
+        bot_type: str = "MID_JOURNEY",
+        state: str = "",
+        **kwargs,
+    ) -> Tuple[Optional[Dict], Optional[str]]:
+        """提交 Imagine 任务并轮询。返回 (task_data, error)"""
+        pbar = kwargs.get("pbar")
+        if not self.api_key:
+            return None, "API密钥未设置"
+
+        try:
+            payload = {
+                "prompt": prompt,
+                "botType": bot_type,
+                "base64Array": base64_array or [],
+                "notifyHook": "",
+                "state": state,
+            }
+            url = f"{self.base_url}/mj/submit/imagine"
+            print(f"[Lingke MJ] Imagine 请求: {url}")
+            session = self._get_session()
+            response = session.post(url, headers=self.get_headers(), json=payload, timeout=self.timeout)
+            if response.status_code != 200:
+                return None, f"API错误: {response.status_code} - {response.text}"
+
+            result = response.json()
+            print(f"[Lingke MJ] Imagine 响应: {json.dumps(result, ensure_ascii=False)[:300]}")
+            if result.get("code") not in (1, 200, "1"):
+                return None, f"提交失败: {result.get('description') or result}"
+            task_id = str(result.get("result") or "")
+            if not task_id:
+                return None, f"未获取到任务ID: {result}"
+            if pbar:
+                pbar.update_absolute(20)
+            return self._mj_poll(task_id, pbar=pbar)
+        except Exception as e:
+            return None, f"处理错误: {str(e)}"
+
+    def mj_action(
+        self,
+        custom_id: str,
+        task_id: str,
+        choose_same_channel: bool = True,
+        state: str = "",
+        **kwargs,
+    ) -> Tuple[Optional[Dict], Optional[str]]:
+        """执行 U/V/Reroll/Upscale/Pan/Zoom 等按钮动作"""
+        pbar = kwargs.get("pbar")
+        if not self.api_key:
+            return None, "API密钥未设置"
+        if not custom_id or not task_id:
+            return None, "需要提供 custom_id 和 task_id"
+
+        try:
+            payload = {
+                "chooseSameChannel": choose_same_channel,
+                "customId": custom_id,
+                "taskId": str(task_id),
+                "notifyHook": "",
+                "state": state,
+            }
+            url = f"{self.base_url}/mj/submit/action"
+            print(f"[Lingke MJ] Action 请求: customId={custom_id} taskId={task_id}")
+            session = self._get_session()
+            response = session.post(url, headers=self.get_headers(), json=payload, timeout=self.timeout)
+            if response.status_code != 200:
+                return None, f"API错误: {response.status_code} - {response.text}"
+
+            result = response.json()
+            print(f"[Lingke MJ] Action 响应: {json.dumps(result, ensure_ascii=False)[:300]}")
+            if result.get("code") not in (1, 200, "1"):
+                return None, f"提交失败: {result.get('description') or result}"
+            new_task_id = str(result.get("result") or "")
+            if not new_task_id:
+                return None, f"未获取到任务ID: {result}"
+            if pbar:
+                pbar.update_absolute(20)
+            return self._mj_poll(new_task_id, pbar=pbar)
+        except Exception as e:
+            return None, f"处理错误: {str(e)}"

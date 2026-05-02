@@ -9,7 +9,7 @@ Comfyui_APIcaller - 多API供应商支持的ComfyUI节点
 """
 
 from .config import APICallerSettings
-from .nodes import NanoBananaEdit, NanoBananaText2Img, GrokVideoNode, Sora2VideoNode, Veo31VideoNode, HailuoVideoNode, APIKeyPoolNode, OpenAILLM, GPTImageText2Img, GPTImageImg2Img
+from .nodes import NanoBananaEdit, NanoBananaText2Img, GrokVideoNode, Sora2VideoNode, Veo31VideoNode, HailuoVideoNode, APIKeyPoolNode, OpenAILLM, GPTImageText2Img, GPTImageImg2Img, MJImagineNode, MJActionNode
 
 
 # 节点类映射
@@ -25,6 +25,8 @@ NODE_CLASS_MAPPINGS = {
     "APIcaller_OpenAILLM": OpenAILLM,
     "APIcaller_GPTImageT2I": GPTImageText2Img,
     "APIcaller_GPTImageI2I": GPTImageImg2Img,
+    "APIcaller_MJImagine": MJImagineNode,
+    "APIcaller_MJAction": MJActionNode,
 }
 
 # 节点显示名称映射
@@ -40,6 +42,8 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "APIcaller_OpenAILLM": "🤖 OpenAI LLM",
     "APIcaller_GPTImageT2I": "🎨 GPT Image Text2Img",
     "APIcaller_GPTImageI2I": "🎨 GPT Image Img2Img",
+    "APIcaller_MJImagine": "🖼️ MJ Imagine",
+    "APIcaller_MJAction": "🖼️ MJ Action",
 }
 
 __all__ = {
