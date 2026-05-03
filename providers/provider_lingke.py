@@ -1381,6 +1381,22 @@ class LingkeProvider(BaseProvider):
 
     # ==================== Midjourney ====================
 
+    def mj_fetch_task(self, task_id: str) -> Tuple[Optional[Dict], Optional[str]]:
+        """单次获取 MJ 任务详情: GET /mj/task/{id}/fetch"""
+        try:
+            url = f"{self.base_url}/mj/task/{task_id}/fetch"
+            session = self._get_session()
+            response = session.get(
+                url,
+                headers=self.get_headers(include_content_type=False),
+                timeout=self.timeout,
+            )
+            if response.status_code != 200:
+                return None, f"获取任务失败: HTTP {response.status_code}"
+            return response.json() or {}, None
+        except Exception as e:
+            return None, f"获取任务错误: {str(e)}"
+
     def _mj_poll(self, task_id: str, pbar=None) -> Tuple[Optional[Dict], Optional[str]]:
         """轮询 MJ 任务状态: GET /mj/task/{id}/fetch"""
         attempts = 0

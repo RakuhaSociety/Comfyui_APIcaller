@@ -9,7 +9,7 @@ Comfyui_APIcaller - 多API供应商支持的ComfyUI节点
 """
 
 from .config import APICallerSettings
-from .nodes import NanoBananaEdit, NanoBananaText2Img, GrokVideoNode, Sora2VideoNode, Veo31VideoNode, HailuoVideoNode, APIKeyPoolNode, OpenAILLM, GPTImageText2Img, GPTImageImg2Img, MJImagineNode, MJActionNode
+from .nodes import NanoBananaEdit, NanoBananaText2Img, GrokVideoNode, Sora2VideoNode, Veo31VideoNode, HailuoVideoNode, APIKeyPoolNode, OpenAILLM, GPTImageText2Img, GPTImageImg2Img, MJImagineNode, MJActionGridNode, MJActionRefineNode
 
 
 # 节点类映射
@@ -26,7 +26,8 @@ NODE_CLASS_MAPPINGS = {
     "APIcaller_GPTImageT2I": GPTImageText2Img,
     "APIcaller_GPTImageI2I": GPTImageImg2Img,
     "APIcaller_MJImagine": MJImagineNode,
-    "APIcaller_MJAction": MJActionNode,
+    "APIcaller_MJActionGrid": MJActionGridNode,
+    "APIcaller_MJActionRefine": MJActionRefineNode,
 }
 
 # 节点显示名称映射
@@ -43,7 +44,8 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "APIcaller_GPTImageT2I": "🎨 GPT Image Text2Img",
     "APIcaller_GPTImageI2I": "🎨 GPT Image Img2Img",
     "APIcaller_MJImagine": "🖼️ MJ Imagine",
-    "APIcaller_MJAction": "🖼️ MJ Action",
+    "APIcaller_MJActionGrid": "🖼️ MJ Action Grid (U/V/Reroll)",
+    "APIcaller_MJActionRefine": "🖼️ MJ Action Refine (Upscale/Vary/Pan/Zoom)",
 }
 
 __all__ = {
