@@ -1397,6 +1397,22 @@ class LingkeProvider(BaseProvider):
         except Exception as e:
             return None, f"获取任务错误: {str(e)}"
 
+    def mj_image_seed(self, task_id: str) -> Tuple[Optional[Dict], Optional[str]]:
+        """获取 MJ 图片 seed: GET /mj/task/{id}/image-seed"""
+        try:
+            url = f"{self.base_url}/mj/task/{task_id}/image-seed"
+            session = self._get_session()
+            response = session.get(
+                url,
+                headers=self.get_headers(include_content_type=False),
+                timeout=self.timeout,
+            )
+            if response.status_code != 200:
+                return None, f"获取 seed 失败: HTTP {response.status_code} - {response.text}"
+            return response.json() or {}, None
+        except Exception as e:
+            return None, f"获取 seed 错误: {str(e)}"
+
     def _mj_poll(self, task_id: str, pbar=None) -> Tuple[Optional[Dict], Optional[str]]:
         """轮询 MJ 任务状态: GET /mj/task/{id}/fetch"""
         attempts = 0
@@ -1479,6 +1495,86 @@ class LingkeProvider(BaseProvider):
         except Exception as e:
             return None, f"处理错误: {str(e)}"
 
+    def mj_describe(
+        self,
+        image_base64: str,
+        state: str = "",
+        **kwargs,
+    ) -> Tuple[Optional[Dict], Optional[str]]:
+        """提交 Describe 任务并轮询。返回 (task_data, error)"""
+        pbar = kwargs.get("pbar")
+        if not self.api_key:
+            return None, "API密钥未设置"
+        if not image_base64:
+            return None, "需要提供 image_base64"
+
+        try:
+            payload = {
+                "base64": image_base64,
+                "notifyHook": "",
+                "state": state,
+            }
+            url = f"{self.base_url}/mj/submit/describe"
+            print(f"[Lingke MJ] Describe 请求: {url}")
+            session = self._get_session()
+            response = session.post(url, headers=self.get_headers(), json=payload, timeout=self.timeout)
+            if response.status_code != 200:
+                return None, f"API错误: {response.status_code} - {response.text}"
+
+            result = response.json()
+            print(f"[Lingke MJ] Describe 响应: {json.dumps(result, ensure_ascii=False)[:300]}")
+            if result.get("code") not in (1, 200, "1"):
+                return None, f"提交失败: {result.get('description') or result}"
+            task_id = str(result.get("result") or "")
+            if not task_id:
+                return None, f"未获取到任务ID: {result}"
+            if pbar:
+                pbar.update_absolute(20)
+            return self._mj_poll(task_id, pbar=pbar)
+        except Exception as e:
+            return None, f"处理错误: {str(e)}"
+
+    def mj_blend(
+        self,
+        base64_array: List[str],
+        dimensions: str = "SQUARE",
+        state: str = "",
+        **kwargs,
+    ) -> Tuple[Optional[Dict], Optional[str]]:
+        """提交 Blend 任务并轮询。返回 (task_data, error)"""
+        pbar = kwargs.get("pbar")
+        if not self.api_key:
+            return None, "API密钥未设置"
+        if not base64_array or len(base64_array) < 2:
+            return None, "Blend 至少需要 2 张图片"
+
+        try:
+            payload = {
+                "base64Array": base64_array,
+                "dimensions": dimensions,
+                "notifyHook": "",
+                "state": state,
+            }
+            url = f"{self.base_url}/mj/submit/blend"
+            print(f"[Lingke MJ] Blend 请求: images={len(base64_array)} dimensions={dimensions}")
+            session = self._get_session()
+            response = session.post(url, headers=self.get_headers(), json=payload, timeout=self.timeout)
+            if response.status_code != 200:
+                return None, f"API错误: {response.status_code} - {response.text}"
+
+            result = response.json()
+            print(f"[Lingke MJ] Blend 响应: {json.dumps(result, ensure_ascii=False)[:300]}")
+            if result.get("code") not in (1, 200, "1"):
+                return None, f"提交失败: {result.get('description') or result}"
+            task_id = str(result.get("result") or "")
+            if not task_id:
+                return None, f"未获取到任务ID: {result}"
+            if pbar:
+                pbar.update_absolute(20)
+            return self._mj_poll(task_id, pbar=pbar)
+        except Exception as e:
+            return None, f"处理错误: {str(e)}"
+
     def mj_action(
         self,
         custom_id: str,
@@ -1511,6 +1607,63 @@ class LingkeProvider(BaseProvider):
 
             result = response.json()
             print(f"[Lingke MJ] Action 响应: {json.dumps(result, ensure_ascii=False)[:300]}")
+            if result.get("code") in (21, "21"):
+                task_id = str(result.get("result") or "")
+                if task_id:
+                    return {
+                        "id": task_id,
+                        "status": "WAITING_MODAL",
+                        "description": result.get("description") or "Waiting for window confirm",
+                        "raw": result,
+                    }, None
+            if result.get("code") not in (1, 200, "1"):
+                return None, f"提交失败: {result.get('description') or result}"
+            new_task_id = str(result.get("result") or "")
+            if not new_task_id:
+                return None, f"未获取到任务ID: {result}"
+            if pbar:
+                pbar.update_absolute(20)
+            return self._mj_poll(new_task_id, pbar=pbar)
+        except Exception as e:
+            return None, f"处理错误: {str(e)}"
+
+    def mj_modal(
+        self,
+        task_id: str,
+        prompt: str = "",
+        mask_base64: str = "",
+        extra_payload: Optional[Dict[str, Any]] = None,
+        state: str = "",
+        **kwargs,
+    ) -> Tuple[Optional[Dict], Optional[str]]:
+        """提交 MJ modal 二次确认（Vary Region / Custom Zoom 等）并轮询。"""
+        pbar = kwargs.get("pbar")
+        if not self.api_key:
+            return None, "API密钥未设置"
+        if not task_id:
+            return None, "需要提供 task_id"
+
+        try:
+            payload = {
+                "taskId": str(task_id),
+                "prompt": prompt or "",
+                "notifyHook": "",
+                "state": state,
+            }
+            if mask_base64:
+                payload["maskBase64"] = mask_base64
+            if extra_payload:
+                payload.update(extra_payload)
+
+            url = f"{self.base_url}/mj/submit/modal"
+            print(f"[Lingke MJ] Modal 请求: taskId={task_id} keys={list(payload.keys())}")
+            session = self._get_session()
+            response = session.post(url, headers=self.get_headers(), json=payload, timeout=self.timeout)
+            if response.status_code != 200:
+                return None, f"API错误: {response.status_code} - {response.text}"
+
+            result = response.json()
+            print(f"[Lingke MJ] Modal 响应: {json.dumps(result, ensure_ascii=False)[:300]}")
             if result.get("code") not in (1, 200, "1"):
                 return None, f"提交失败: {result.get('description') or result}"
             new_task_id = str(result.get("result") or "")
